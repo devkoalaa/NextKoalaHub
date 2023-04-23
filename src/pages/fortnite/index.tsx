@@ -1,4 +1,4 @@
-import { BotaoCu } from '@/components/BotaoCu'
+import { CustomInput } from '@/components/BotaoCu'
 import { Inter } from 'next/font/google'
 // import style from './style.scss'
 
@@ -8,7 +8,16 @@ export default function Fortnite() {
     return (
         <div>
             <h1 className={inter.className}>Fortnite</h1>
-            <BotaoCu name="vitao"></BotaoCu>
+            <CustomInput
+                title="Nome:"
+                placeholder="Digite seu nome"
+                type="text"
+            ></CustomInput>
+            <CustomInput
+                title="Celular:"
+                placeholder="(99) 9 9999-9999"
+                type="phone"
+            ></CustomInput>
         </div>
     )
 }

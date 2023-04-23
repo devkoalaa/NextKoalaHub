@@ -1,6 +1,7 @@
+import { CustomInput } from '@/components/BotaoCu'
 import { useEffect, useState } from 'react'
 
-interface iPokemon {
+interface PokemonInterface {
     name: string
     id: number
     types: [
@@ -11,10 +12,14 @@ interface iPokemon {
             }
         }
     ]
+    sprites: {
+        front_default: string
+    }
 }
 
 export default function Pokemon() {
-    const [pokemon, setPokemon] = useState<iPokemon>()
+    const [pokemon, setPokemon] = useState<PokemonInterface>()
+    const [pokemonBuscado, setPokemonUsado] = useState('')
 
     const URL_API = 'https://pokeapi.co/api/v2/pokemon/ditto'
 
@@ -29,9 +34,21 @@ export default function Pokemon() {
     }, [])
 
     return (
-        <div>
-            <h1>Pokémon!</h1>
-            {/* {if (pokemon != null) {<h2>{pokemon.name}</h2>}} */}
-        </div>
+        <>
+            <div>
+                <h1>Pokémon!</h1>
+                <CustomInput
+                    title="Qual Pokémon deseja buscar?"
+                    placeholder="Digite o nome do Pokémon"
+                    type="text"
+                />
+                <CustomInput
+                    title="Qual Pokémon deseja buscar?"
+                    placeholder="Digite o nome do Pokémon"
+                    type="text"
+                />
+            </div>
+            <div>{pokemon && <img src={pokemon.sprites.front_default} />}</div>
+        </>
     )
 }
