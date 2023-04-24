@@ -1,4 +1,4 @@
-import { CustomInput } from '@/components/CustomInput'
+// import { CustomInput } from '@/components/CustomInput'
 import { useEffect, useState, useRef } from 'react'
 import Image from 'next/image'
 
@@ -15,6 +15,11 @@ interface PokemonInterface {
     ]
     sprites: {
         front_default: string
+        other: {
+            'official-artwork': {
+                front_default: string
+            }
+        }
     }
 }
 
@@ -60,6 +65,16 @@ export default function Pokemon() {
                 </form>
             </div>
             {pokemon && <img src={pokemon.sprites.front_default} />}
+            {pokemon && (
+                <Image
+                    src={
+                        pokemon.sprites.other['official-artwork'].front_default
+                    }
+                    alt="Italo"
+                    width={200}
+                    height={200}
+                />
+            )}
             {pokemon && <h1>{pokemon.name}</h1>}
         </>
     )
