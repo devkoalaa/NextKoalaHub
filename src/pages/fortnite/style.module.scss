@@ -1,0 +1,22 @@
+.container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.box {
+    width: auto;
+    height: auto;
+    font-size: 200px;
+
+    h5 {
+        font-size: 50px;
+    }
+}
+
+.fortnite-font {
+    font-family: FortniteFont;
+}

@@ -29,22 +29,22 @@ export default function Home() {
 
                 <div className={styles.grid}>
                     <Link
-                        href="#"
-                        className={styles.card}
-                        rel="noopener noreferrer"
-                    >
-                        <h2 className={inter.className}>
-                            Console <span>-&gt;</span>
-                        </h2>
-                    </Link>
-
-                    <Link
                         href="/fortnite"
                         className={styles.card}
                         rel="noopener noreferrer"
                     >
                         <h2 className={inter.className}>
                             Fortnite <span>-&gt;</span>
+                        </h2>
+                    </Link>
+
+                    <Link
+                        href="/ssplib"
+                        className={styles.card}
+                        rel="noopener noreferrer"
+                    >
+                        <h2 className={inter.className}>
+                            SSP LIB <span>-&gt;</span>
                         </h2>
                     </Link>
 
@@ -59,7 +59,7 @@ export default function Home() {
                     </Link>
 
                     <Link
-                        href="#"
+                        href="/uno"
                         className={styles.card}
                         rel="noopener noreferrer"
                     >

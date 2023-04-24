@@ -1,7 +1,8 @@
 // import { CustomInput } from '@/components/CustomInput'
 import { useEffect, useState, useRef } from 'react'
 import Image from 'next/image'
-
+import styles from './style.module.scss'
+import * as SSPLIB from '@ssplib/react-components'
 interface PokemonInterface {
     name: string
     id: number
@@ -23,59 +24,63 @@ interface PokemonInterface {
     }
 }
 
+const URL_API = 'https://pokeapi.co/api/v2/pokemon/'
+
 export default function Pokemon() {
     const [pokemon, setPokemon] = useState<PokemonInterface>()
     const [pokemonBuscado, setPokemonBuscado] = useState('')
 
-    const URL_API = 'https://pokeapi.co/api/v2/pokemon/'
-
     const pesquisarPokemon = (event: any) => {
         event.preventDefault()
-
         if (pokemonBuscado) {
             fetch(URL_API + pokemonBuscado).then((response) => {
                 response.json().then((data) => {
-                    setPokemon(data)
+                    setPokemon({
+                        ...data,
+                        name:
+                            data.name[0].toUpperCase() + data.name.substring(1),
+                    })
                 })
             })
         }
-
         setPokemonBuscado('')
     }
 
     useEffect(() => {
-        console.log('Pokemon: ', pokemon)
+        // // console.log(pokemon)
     }, [pokemon])
 
     return (
-        <>
-            <div>
-                <h1>Pokémon!</h1>
-                <label>Qual Pokémon deseja buscar</label>
-            </div>
-            <div>
-                <form onSubmit={pesquisarPokemon}>
-                    <input
-                        onChange={(e) => setPokemonBuscado(e.target.value)}
-                        placeholder="Nome do Pokémon"
-                        value={pokemonBuscado}
+        <div className={styles.container}>
+            <div className={styles.box}>
+                <div>
+                    <h1>Pokémon!</h1>
+                    <label>Qual Pokémon deseja buscar</label>
+                </div>
+                <div>
+                    <form onSubmit={pesquisarPokemon}>
+                        <input
+                            onChange={(e) => setPokemonBuscado(e.target.value)}
+                            placeholder="Nome do Pokémon"
+                            value={pokemonBuscado}
+                        />
+                        &nbsp;
+                        <button type="submit">PESQUISAR</button>
+                    </form>
+                </div>
+                {pokemon && <h1>{pokemon.name}</h1>}
+                {pokemon && (
+                    <Image
+                        src={
+                            pokemon.sprites.other['official-artwork']
+                                .front_default
+                        }
+                        alt={pokemon.name}
+                        width={200}
+                        height={200}
                     />
-                    &nbsp;
-                    <button type="submit">PESQUISAR</button>
-                </form>
+                )}
             </div>
-            {pokemon && <img src={pokemon.sprites.front_default} />}
-            {pokemon && (
-                <Image
-                    src={
-                        pokemon.sprites.other['official-artwork'].front_default
-                    }
-                    alt="Italo"
-                    width={200}
-                    height={200}
-                />
-            )}
-            {pokemon && <h1>{pokemon.name}</h1>}
-        </>
+        </div>
     )
 }

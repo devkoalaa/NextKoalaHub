@@ -1,3 +1,8 @@
+@font-face {
+    font-family: FortniteFont;
+    src: local('FortniteFont'), url('../fonts/fortnite.otf') format('truetype');
+}
+
 :root {
     --max-width: 1100px;
     --border-radius: 12px;
