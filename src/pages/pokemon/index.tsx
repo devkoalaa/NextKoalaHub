@@ -1,5 +1,5 @@
-import { CustomInput } from '@/components/BotaoCu'
-import { useEffect, useState } from 'react'
+import { CustomInput } from '@/components/CustomInput'
+import { useEffect, useState, useRef } from 'react'
 
 interface PokemonInterface {
     name: string
@@ -19,36 +19,36 @@ interface PokemonInterface {
 
 export default function Pokemon() {
     const [pokemon, setPokemon] = useState<PokemonInterface>()
-    const [pokemonBuscado, setPokemonUsado] = useState('')
+    const [pokemonBuscado, setPokemonBuscado] = useState('')
 
-    const URL_API = 'https://pokeapi.co/api/v2/pokemon/ditto'
+    const URL_API = 'https://pokeapi.co/api/v2/pokemon/'
 
-    useEffect(() => {
-        fetch(URL_API).then((response) => {
+    const inputRef = useRef(null)
+
+    function pesquisarPokemon() {
+        inputRef.current.value & setPokemonBuscado(inputRef.current.value)
+        
+        fetch(URL_API + pokemonBuscado).then((response) => {
             response.json().then((data) => {
                 setPokemon(data)
                 console.log('pokemon: ', data)
-                console.log('var pokemon: ', pokemon)
             })
         })
-    }, [])
+    }
 
     return (
         <>
             <div>
                 <h1>Pokémon!</h1>
-                <CustomInput
-                    title="Qual Pokémon deseja buscar?"
-                    placeholder="Digite o nome do Pokémon"
-                    type="text"
-                />
-                <CustomInput
-                    title="Qual Pokémon deseja buscar?"
-                    placeholder="Digite o nome do Pokémon"
-                    type="text"
-                />
+                <label>Qual Pokémon deseja</label>
+             </div>
+             <div>
+                <input ref={inputRef} placeholder="Nome do Pokémon"/>
             </div>
-            <div>{pokemon && <img src={pokemon.sprites.front_default} />}</div>
+            <div>
+                <button onClick={pesquisarPokemon}>PESQUISAR</button>
+            </div>
+            {pokemon && <img src={pokemon.sprites.front_default} />}
         </>
     )
 }

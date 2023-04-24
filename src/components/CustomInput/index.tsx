@@ -1,14 +1,17 @@
+import { useRef } from "react"
+
 export function CustomInput({
     title,
     placeholder,
-    type,
 }: {
     title: string
     placeholder?: string
-    type: string
 }) {
+    
+    const inputRef = useRef(null)
+    
     function pesquisarPokemon() {
-        console.log('galinhaaa')
+        console.log('galinhaaa: ', inputRef.current.value)
     }
 
     // export function BotaoCu(propriedades: any) {
@@ -18,7 +21,7 @@ export function CustomInput({
                 <label>{title}</label>
             </div>
             <div>
-                <input type={type} placeholder={placeholder} />
+                <input ref={inputRef} placeholder={placeholder} />
             </div>
             <div>
                 <button onClick={pesquisarPokemon}>PESQUISAR</button>
