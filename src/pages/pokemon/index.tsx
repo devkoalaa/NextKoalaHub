@@ -1,5 +1,6 @@
 import { CustomInput } from '@/components/CustomInput'
 import { useEffect, useState, useRef } from 'react'
+import Image from 'next/image'
 
 interface PokemonInterface {
     name: string
@@ -23,32 +24,43 @@ export default function Pokemon() {
 
     const URL_API = 'https://pokeapi.co/api/v2/pokemon/'
 
-    const inputRef = useRef(null)
+    const pesquisarPokemon = (event: any) => {
+        event.preventDefault()
 
-    function pesquisarPokemon() {
-        inputRef.current.value & setPokemonBuscado(inputRef.current.value)
-        
-        fetch(URL_API + pokemonBuscado).then((response) => {
-            response.json().then((data) => {
-                setPokemon(data)
-                console.log('pokemon: ', data)
+        if (pokemonBuscado) {
+            fetch(URL_API + pokemonBuscado).then((response) => {
+                response.json().then((data) => {
+                    setPokemon(data)
+                })
             })
-        })
+        }
+
+        setPokemonBuscado('')
     }
+
+    useEffect(() => {
+        console.log('Pokemon: ', pokemon)
+    }, [pokemon])
 
     return (
         <>
             <div>
                 <h1>Pokémon!</h1>
-                <label>Qual Pokémon deseja</label>
-             </div>
-             <div>
-                <input ref={inputRef} placeholder="Nome do Pokémon"/>
+                <label>Qual Pokémon deseja buscar</label>
             </div>
             <div>
-                <button onClick={pesquisarPokemon}>PESQUISAR</button>
+                <form onSubmit={pesquisarPokemon}>
+                    <input
+                        onChange={(e) => setPokemonBuscado(e.target.value)}
+                        placeholder="Nome do Pokémon"
+                        value={pokemonBuscado}
+                    />
+                    &nbsp;
+                    <button type="submit">PESQUISAR</button>
+                </form>
             </div>
             {pokemon && <img src={pokemon.sprites.front_default} />}
+            {pokemon && <h1>{pokemon.name}</h1>}
         </>
     )
 }
