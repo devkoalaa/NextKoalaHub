@@ -1,7 +1,7 @@
 // import { CustomInput } from '@/components/CustomInput'
 import { useEffect, useState, useRef } from 'react'
 import Image from 'next/image'
-import styles from './style.module.scss'
+import s from './style.module.scss'
 import * as SSPLIB from '@ssplib/react-components'
 interface PokemonInterface {
     name: string
@@ -51,8 +51,8 @@ export default function Pokemon() {
     }, [pokemon])
 
     return (
-        <div className={styles.container}>
-            <div className={styles.box}>
+        <div className={s.container}>
+            <div className={s.box}>
                 <div>
                     <h1>Pokémon!</h1>
                     <label>Qual Pokémon deseja buscar</label>
