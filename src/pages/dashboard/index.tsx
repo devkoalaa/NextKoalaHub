@@ -1,5 +1,3 @@
-import { BotaoCu } from '@/components/BotaoCu'
-
 export default function Dashboard() {
     return (
         <div>
@@ -11,7 +9,6 @@ export default function Dashboard() {
                 <option value="2">asdasd</option>
                 <option value="3">asdasd</option>
             </select>
-            <BotaoCu name="klebao"></BotaoCu>
         </div>
     )
 }
