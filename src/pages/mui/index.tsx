@@ -81,7 +81,7 @@ export default function Mui() {
                             value={pokemonBuscado}
                         />
                     </form>
-                    <ImageList sx={{ width: 500, height: 'fill' }}>
+                    <ImageList>
                         {listPkm.map((item, index) => (
                             <ImageListItem key={item.name + index}>
                                 <img
