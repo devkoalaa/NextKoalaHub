@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from 'react'
 import Image from 'next/image'
 import s from './style.module.scss'
 import * as SSPLIB from '@ssplib/react-components'
+
 interface PokemonInterface {
     name: string
     id: number
@@ -32,6 +33,7 @@ export default function Pokemon() {
 
     const pesquisarPokemon = (event: any) => {
         event.preventDefault()
+
         if (pokemonBuscado) {
             fetch(URL_API + pokemonBuscado).then((response) => {
                 response.json().then((data) => {
@@ -43,6 +45,7 @@ export default function Pokemon() {
                 })
             })
         }
+
         setPokemonBuscado('')
     }
 
