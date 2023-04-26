@@ -1,3 +1,3 @@
 export default function Chackra() {
-    return <div> Helo Chackra!</div>
+    return <div> Hello Chackra!</div>
 }
