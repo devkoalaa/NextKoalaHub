@@ -1,8 +1,16 @@
-// import { CustomInput } from '@/components/CustomInput'
-import { useEffect, useState, useRef } from 'react'
-import Image from 'next/image'
-import s from './style.module.scss'
-import * as SSPLIB from '@ssplib/react-components'
+/* eslint-disable @next/next/no-img-element */
+import {
+    Box,
+    Button,
+    Container,
+    ImageList,
+    ImageListItem,
+    ImageListItemBar,
+    Stack,
+    TextField,
+} from '@mui/material'
+import { Fragment, useEffect, useState } from 'react'
+import DeleteIcon from '@mui/icons-material/Delete'
 
 interface PokemonInterface {
     name: string
@@ -28,62 +36,89 @@ interface PokemonInterface {
 const URL_API = 'https://pokeapi.co/api/v2/pokemon/'
 
 export default function Pokemon() {
-    const [pokemon, setPokemon] = useState<PokemonInterface>()
-    const [pokemonBuscado, setPokemonBuscado] = useState('')
+    const [pkmSearched, setPkmSearched] = useState('')
+    const [pkm, setPkm] = useState<PokemonInterface>()
+    const [listPkm, setListPkm] = useState<PokemonInterface[]>([])
 
-    const pesquisarPokemon = (event: any) => {
+    useEffect(() => {
+        const storageListPkm = localStorage.getItem('@NKH:listPkm')
+        storageListPkm && setListPkm(JSON.parse(storageListPkm))
+    }, [])
+
+    useEffect(() => {
+        if (listPkm.length <= 0) return
+        localStorage.setItem('@NKH:listPkm', JSON.stringify(listPkm))
+    }, [listPkm])
+
+    const searchPkm = (event: any) => {
         event.preventDefault()
 
-        if (pokemonBuscado) {
-            fetch(URL_API + pokemonBuscado).then((response) => {
+        pkmSearched &&
+            fetch(URL_API + pkmSearched).then((response) => {
                 response.json().then((data) => {
-                    setPokemon({
+                    setPkm({
                         ...data,
                         name:
                             data.name[0].toUpperCase() + data.name.substring(1),
                     })
                 })
             })
-        }
 
-        setPokemonBuscado('')
+        setPkmSearched('')
     }
 
     useEffect(() => {
-        // // console.log(pokemon)
-    }, [pokemon])
+        pkm && setListPkm((d) => [...d, pkm])
+    }, [pkm])
 
     return (
-        <div className={s.container}>
-            <div className={s.box}>
-                <div>
-                    <h1>Pokémon!</h1>
-                    <label>Qual Pokémon deseja buscar</label>
-                </div>
-                <div>
-                    <form onSubmit={pesquisarPokemon}>
-                        <input
-                            onChange={(e) => setPokemonBuscado(e.target.value)}
-                            placeholder="Nome do Pokémon"
-                            value={pokemonBuscado}
-                        />
-                        &nbsp;
-                        <button type="submit">PESQUISAR</button>
+        <Fragment>
+            <Container maxWidth="sm">
+                <Box sx={{ height: '100vh', margin: '15px' }}>
+                    <form onSubmit={searchPkm}>
+                        <Stack direction="row" spacing={2}>
+                            <TextField
+                                autoFocus
+                                sx={{ marginBottom: '10px' }}
+                                label="Buscar Pokémon!"
+                                type="search"
+                                value={pkmSearched}
+                                onChange={(e) =>
+                                    setPkmSearched(e.target.value.toLowerCase())
+                                }
+                            />
+                            <Button
+                                size="small"
+                                color="error"
+                                startIcon={<DeleteIcon />}
+                                onClick={() => {
+                                    localStorage.clear(), setListPkm([])
+                                }}
+                            >
+                                Limpar
+                            </Button>
+                        </Stack>
                     </form>
-                </div>
-                {pokemon && <h1>{pokemon.name}</h1>}
-                {pokemon && (
-                    <Image
-                        src={
-                            pokemon.sprites.other['official-artwork']
-                                .front_default
-                        }
-                        alt={pokemon.name}
-                        width={200}
-                        height={200}
-                    />
-                )}
-            </div>
-        </div>
+                    <ImageList>
+                        {listPkm.map((pkm, index) => (
+                            <ImageListItem key={pkm.name + index}>
+                                <img
+                                    src={
+                                        pkm.sprites.other['official-artwork']
+                                            .front_default
+                                    }
+                                    alt={pkm.name}
+                                    loading="lazy"
+                                />
+                                <ImageListItemBar
+                                    title={pkm.name}
+                                    position="below"
+                                />
+                            </ImageListItem>
+                        ))}
+                    </ImageList>
+                </Box>
+            </Container>
+        </Fragment>
     )
 }

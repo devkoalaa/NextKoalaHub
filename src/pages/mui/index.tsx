@@ -1,23 +1,21 @@
 /* eslint-disable @next/next/no-img-element */
-import * as React from 'react'
-import ImageList from '@mui/material/ImageList'
-import ImageListItem from '@mui/material/ImageListItem'
-import ImageListItemBar from '@mui/material/ImageListItemBar'
 import {
     Box,
+    Button,
     Container,
-    CssBaseline,
+    ImageList,
+    ImageListItem,
+    ImageListItemBar,
+    Stack,
     TextField,
-    ThemeProvider,
 } from '@mui/material'
-import styles from './style.module.scss'
-import { dark } from '@mui/material/styles/createPalette'
-import { useCallback, useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
+import DeleteIcon from '@mui/icons-material/Delete'
 
 interface PokemonInterface {
     name: string
-    id?: number
-    types?: [
+    id: number
+    types: [
         {
             slot: number
             type: {
@@ -25,7 +23,7 @@ interface PokemonInterface {
             }
         }
     ]
-    sprites?: {
+    sprites: {
         front_default: string
         other: {
             'official-artwork': {
@@ -38,62 +36,81 @@ interface PokemonInterface {
 const URL_API = 'https://pokeapi.co/api/v2/pokemon/'
 
 export default function Mui() {
-    const [pokemon, setPokemon] = useState<PokemonInterface>()
-    const [pokemonBuscado, setPokemonBuscado] = useState('')
+    const [pkmSearched, setPkmSearched] = useState('')
+    const [pkm, setPkm] = useState<PokemonInterface>()
     const [listPkm, setListPkm] = useState<PokemonInterface[]>([])
 
-    const pesquisarPokemon = (event: any) => {
+    useEffect(() => {
+        const storageListPkm = localStorage.getItem('@NKH:listPkm')
+        storageListPkm && setListPkm(JSON.parse(storageListPkm))
+    }, [])
+
+    useEffect(() => {
+        if (listPkm.length <= 0) return
+        localStorage.setItem('@NKH:listPkm', JSON.stringify(listPkm))
+    }, [listPkm])
+
+    const searchPkm = (event: any) => {
         event.preventDefault()
 
-        if (pokemonBuscado) {
-            fetch(URL_API + pokemonBuscado).then((response) => {
+        pkmSearched &&
+            fetch(URL_API + pkmSearched).then((response) => {
                 response.json().then((data) => {
-                    setPokemon({
+                    setPkm({
                         ...data,
                         name:
                             data.name[0].toUpperCase() + data.name.substring(1),
                     })
                 })
             })
-        }
 
-        setPokemonBuscado('')
+        setPkmSearched('')
     }
 
     useEffect(() => {
-        pokemon && setListPkm((d) => [...d, pokemon])
-    }, [pokemon])
+        pkm && setListPkm((d) => [...d, pkm])
+    }, [pkm])
 
     return (
-        <React.Fragment>
-            <CssBaseline />
+        <Fragment>
             <Container maxWidth="sm">
                 <Box sx={{ height: '100vh', margin: '15px' }}>
-                    <form onSubmit={pesquisarPokemon}>
-                        <TextField
-                            sx={{ marginBottom: '10px' }}
-                            id="outlined-search"
-                            label="Buscar Pokémon!"
-                            type="search"
-                            onChange={(e) =>
-                                setPokemonBuscado(e.target.value.toLowerCase())
-                            }
-                            value={pokemonBuscado}
-                        />
+                    <form onSubmit={searchPkm}>
+                        <Stack direction="row" spacing={2}>
+                            <TextField
+                                sx={{ marginBottom: '10px' }}
+                                label="Buscar Pokémon!"
+                                type="search"
+                                value={pkmSearched}
+                                onChange={(e) =>
+                                    setPkmSearched(e.target.value.toLowerCase())
+                                }
+                            />
+                            <Button
+                                size="small"
+                                color="secondary"
+                                startIcon={<DeleteIcon />}
+                                onClick={() => {
+                                    localStorage.clear(), setListPkm([])
+                                }}
+                            >
+                                Limpar
+                            </Button>
+                        </Stack>
                     </form>
                     <ImageList>
-                        {listPkm.map((item, index) => (
-                            <ImageListItem key={item.name + index}>
+                        {listPkm.map((pkm, index) => (
+                            <ImageListItem key={pkm.name + index}>
                                 <img
                                     src={
-                                        item.sprites?.other['official-artwork']
+                                        pkm.sprites.other['official-artwork']
                                             .front_default
                                     }
-                                    alt={item.name}
+                                    alt={pkm.name}
                                     loading="lazy"
                                 />
                                 <ImageListItemBar
-                                    title={item.name}
+                                    title={pkm.name}
                                     position="below"
                                 />
                             </ImageListItem>
@@ -101,6 +118,6 @@ export default function Mui() {
                     </ImageList>
                 </Box>
             </Container>
-        </React.Fragment>
+        </Fragment>
     )
 }
