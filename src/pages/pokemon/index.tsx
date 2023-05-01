@@ -86,7 +86,7 @@ export default function Pokemon() {
                         <Input
                             autoFocus
                             value={searchedPkm}
-                            placeholder="Buscar Pokémon!"
+                            placeholder="Adicionar Pokémon!"
                             color="black"
                             borderColor="black"
                             onChange={(e) =>
@@ -94,7 +94,7 @@ export default function Pokemon() {
                             }
                         />
                         <Button colorScheme="blue" onClick={searchPkm}>
-                            Buscar
+                            Adicionar
                         </Button>
                         <Button
                             colorScheme="red"
