@@ -9,6 +9,7 @@ import {
    Image,
    Input,
    Stack,
+   extendTheme,
    useMediaQuery,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
@@ -23,6 +24,14 @@ export default function Pokemon() {
    const [listPkm, setListPkm] = useState<PkmInterface[]>([])
    const [searchedPkm, setSearchedPkm] = useState('')
    const URL_API = 'https://pokeapi.co/api/v2/pokemon/'
+   const [isLarger] = useMediaQuery('(min-width: 480px)')
+
+   const theme = extendTheme({
+      breakpoints: {
+         sm: '300px',
+         md: '500px',
+      },
+   })
 
    useEffect(() => {
       const storageListPkm = localStorage.getItem('@NKH:listPkm')
@@ -33,8 +42,6 @@ export default function Pokemon() {
       if (listPkm.length <= 0) return
       localStorage.setItem('@NKH:listPkm', JSON.stringify(listPkm))
    }, [listPkm])
-
-   const [isLargerThan800] = useMediaQuery('(min-width: 800px)')
 
    const searchPkm = (event: any) => {
       event.preventDefault()
@@ -63,41 +70,38 @@ export default function Pokemon() {
          <Head>
             <title>Koala Hub | Pokemon</title>
          </Head>
-         <Container>
-            <form onSubmit={searchPkm}>
-               <Stack direction={'row'} paddingY="20px">
-                  <Input
-                     autoFocus
-                     value={searchedPkm}
-                     placeholder="Adicionar Pokémon!"
-                     onChange={(e) =>
-                        setSearchedPkm(e.target.value.toLowerCase())
-                     }
-                  />
-                  <Button colorScheme="blue" onClick={searchPkm}>
-                     <AddIcon />
-                  </Button>
-                  <Button
-                     colorScheme="red"
-                     onClick={() => {
-                        setListPkm([]), localStorage.clear()
-                     }}
-                  >
-                     <DeleteIcon />
-                  </Button>
-               </Stack>
-            </form>
-         </Container>
+         <form onSubmit={searchPkm}>
+            <Stack direction={'row'} paddingY="20px">
+               <Input
+                  autoFocus
+                  value={searchedPkm}
+                  placeholder="Adicionar Pokémon!"
+                  onChange={(e) => setSearchedPkm(e.target.value.toLowerCase())}
+               />
+               <Button colorScheme="blue" onClick={searchPkm}>
+                  <AddIcon />
+               </Button>
+               <Button
+                  colorScheme="red"
+                  onClick={() => {
+                     setListPkm([]), localStorage.clear()
+                  }}
+               >
+                  <DeleteIcon />
+               </Button>
+            </Stack>
+         </form>
          <Container>
             <Center>
                <Grid
-                  // templateColumns={{
-                  //    sm: 'repeat(2, 1fr)',
-                  //    md: 'repeat(3, 1fr)',
-                  //    lg: 'repeat(5, 1fr)',
-                  // }}
-
-                  templateColumns={'repeat(2, 1fr)'}
+                  templateColumns={{
+                     base: 'repeat(2, 1fr)',
+                     sm: 'repeat(3, 1fr)',
+                     md: 'repeat(4, 1fr)',
+                     lg: 'repeat(5, 1fr)',
+                     xl: 'repeat(6, 1fr)',
+                     '2xl': 'repeat(8, 1fr)',
+                  }}
                   gap={3}
                >
                   {listPkm &&
