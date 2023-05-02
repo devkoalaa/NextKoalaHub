@@ -21,7 +21,6 @@ export default function Pokemon() {
    const [pkm, setPkm] = useState<PkmInterface>()
    const [listPkm, setListPkm] = useState<PkmInterface[]>([])
    const [searchedPkm, setSearchedPkm] = useState('')
-   const URL_API = 'https://pokeapi.co/api/v2/pokemon/'
 
    useEffect(() => {
       const storageListPkm = localStorage.getItem('@NKH:listPkm')
