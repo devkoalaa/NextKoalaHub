@@ -59,7 +59,7 @@ export default function Pokemon() {
    }, [pkm])
 
    return (
-      <Container>
+      <Container paddingBottom={5}>
          <Head>
             <title>Koala Hub | Pokemon</title>
          </Head>
