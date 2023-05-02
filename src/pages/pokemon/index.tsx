@@ -1,3 +1,4 @@
+import { AddIcon, DeleteIcon } from '@chakra-ui/icons'
 import {
    Badge,
    Box,
@@ -9,29 +10,18 @@ import {
    Image,
    Input,
    Stack,
-   extendTheme,
-   useMediaQuery,
 } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
-import s from './styles.module.scss'
-import { PokemonApi } from '../api/pokemon'
-import { PkmInterface } from '../../interfaces/PkmInterface'
-import { AddIcon, DeleteIcon } from '@chakra-ui/icons'
 import Head from 'next/head'
+import { useEffect, useState } from 'react'
+import { PkmInterface } from '../../interfaces/PkmInterface'
+import { PokemonApi } from '../api/pokemon'
+import s from './styles.module.scss'
 
 export default function Pokemon() {
    const [pkm, setPkm] = useState<PkmInterface>()
    const [listPkm, setListPkm] = useState<PkmInterface[]>([])
    const [searchedPkm, setSearchedPkm] = useState('')
    const URL_API = 'https://pokeapi.co/api/v2/pokemon/'
-   const [isLarger] = useMediaQuery('(min-width: 480px)')
-
-   const theme = extendTheme({
-      breakpoints: {
-         sm: '300px',
-         md: '500px',
-      },
-   })
 
    useEffect(() => {
       const storageListPkm = localStorage.getItem('@NKH:listPkm')
@@ -43,26 +33,16 @@ export default function Pokemon() {
       localStorage.setItem('@NKH:listPkm', JSON.stringify(listPkm))
    }, [listPkm])
 
-   const searchPkm = (event: any) => {
+   const searchPkm = async (event: any) => {
       event.preventDefault()
 
-      // setPkm(PokemonApi(searchedPkm))
-
-      searchedPkm &&
-         fetch(URL_API + searchedPkm).then((response) => {
-            response.json().then((data) => {
-               setPkm({
-                  ...data,
-                  name: data.name[0].toUpperCase() + data.name.substring(1),
-               })
-            })
-         })
+      setPkm(await PokemonApi(searchedPkm))
 
       setSearchedPkm('')
    }
 
    useEffect(() => {
-      pkm && setListPkm((e) => [...e, pkm])
+      pkm && setListPkm((e) => [pkm, ...e])
    }, [pkm])
 
    return (
@@ -107,8 +87,8 @@ export default function Pokemon() {
                   {listPkm &&
                      listPkm.map((pkm, index) => {
                         return (
-                           // <a href={'pokemon/' + pkm.id.toString()} key={index}>
-                           <div key={index}>
+                           <a href={'pokemon/' + pkm.id.toString()} key={index}>
+                              {/* <div key={index}> */}
                               <GridItem className={s.container}>
                                  <div className={s.front}>
                                     <Box borderWidth="1px" borderRadius="lg">
@@ -195,7 +175,7 @@ export default function Pokemon() {
                                     </Box>
                                  </div>
                               </GridItem>
-                           </div>
+                           </a>
                         )
                      })}
                </Grid>
