@@ -74,7 +74,7 @@ export default function Pokemon() {
 
    const handleKey = (e: React.KeyboardEvent) => {
       if (e.key === 'Enter') {
-         searchPkm2(searchedPkm)
+         searchPkm2()
       }
    }
 
