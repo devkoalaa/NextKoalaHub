@@ -39,7 +39,7 @@ export default function Home() {
                     </Link>
 
                     <Link
-                        href="/ssplib"
+                        href="/"
                         className={styles.card}
                         rel="noopener noreferrer"
                     >
