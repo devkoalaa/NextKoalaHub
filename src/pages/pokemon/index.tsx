@@ -5,6 +5,9 @@ import {
    Button,
    Center,
    Container,
+   FormControl,
+   FormErrorMessage,
+   FormHelperText,
    Grid,
    GridItem,
    Image,
@@ -21,6 +24,8 @@ export default function Pokemon() {
    const [pkm, setPkm] = useState<PkmInterface>()
    const [listPkm, setListPkm] = useState<PkmInterface[]>([])
    const [searchedPkm, setSearchedPkm] = useState('')
+   const [isError, setIsError] = useState(false)
+   const [isSubmitting, setIsSubmitting] = useState(false)
 
    useEffect(() => {
       const storageListPkm = localStorage.getItem('@NKH:listPkm')
@@ -30,12 +35,26 @@ export default function Pokemon() {
    useEffect(() => {
       if (listPkm.length <= 0) return
       localStorage.setItem('@NKH:listPkm', JSON.stringify(listPkm))
+      setIsSubmitting(false)
    }, [listPkm])
 
    const searchPkm = async (event: any) => {
       event.preventDefault()
 
-      setPkm(await PokemonApi(searchedPkm))
+      setIsSubmitting(true)
+
+      const result = await PokemonApi(searchedPkm)
+
+      console.log('Galinha Chique:', result)
+
+      // typeof result && setPkm(result)
+
+      result.hasOwnProperty('abilities') && setPkm(result)
+
+      result.hasOwnProperty('isError') && setIsSubmitting(result.isSubimitting),
+         setIsError(result.isError)
+
+      // setPkm(await PokemonApi(searchedPkm))
 
       setSearchedPkm('')
    }
@@ -49,27 +68,43 @@ export default function Pokemon() {
          <Head>
             <title>Koala Hub | Pokemon</title>
          </Head>
-         <form onSubmit={searchPkm}>
-            <Stack direction={'row'} paddingY="20px">
-               <Input
-                  autoFocus
-                  value={searchedPkm}
-                  placeholder="Adicionar Pokémon!"
-                  onChange={(e) => setSearchedPkm(e.target.value.toLowerCase())}
-               />
-               <Button colorScheme="blue" onClick={searchPkm}>
-                  <AddIcon />
-               </Button>
-               <Button
-                  colorScheme="red"
-                  onClick={() => {
-                     setListPkm([]), localStorage.clear()
-                  }}
-               >
-                  <DeleteIcon />
-               </Button>
-            </Stack>
-         </form>
+         <FormControl isInvalid={isError} onSubmit={searchPkm}>
+            <form onSubmit={searchPkm}>
+               <Stack direction={'row'} paddingY="20px">
+                  <Stack>
+                     <Input
+                        autoFocus
+                        onFocus={() => setIsError(false)}
+                        value={searchedPkm}
+                        placeholder="Adicionar Pokémon!"
+                        onChange={(e) =>
+                           setSearchedPkm(e.target.value.toLowerCase())
+                        }
+                     />
+                     {isError && (
+                        <FormErrorMessage>
+                           Pokémon não encontrado
+                        </FormErrorMessage>
+                     )}
+                  </Stack>
+                  <Button
+                     colorScheme="blue"
+                     onClick={searchPkm}
+                     isLoading={isSubmitting}
+                  >
+                     <AddIcon />
+                  </Button>
+                  <Button
+                     colorScheme="red"
+                     onClick={() => {
+                        setListPkm([]), localStorage.clear()
+                     }}
+                  >
+                     <DeleteIcon />
+                  </Button>
+               </Stack>
+            </form>
+         </FormControl>
          <Container>
             <Center>
                <Grid
