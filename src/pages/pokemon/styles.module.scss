@@ -1,30 +1,34 @@
 .container {
-    height: 315px;
-    width: 220px;
-    position: relative;
-    perspective: 1000px;
+   height: 230px;
+   width: 175px;
+   position: relative;
+   perspective: 1000px;
 }
 
 .front,
 .back {
-    position: absolute;
-    backface-visibility: hidden;
-    transform-style: preserve-3d;
-    transition: all 1s ease;
+   position: absolute;
+   backface-visibility: hidden;
+   transform-style: preserve-3d;
+   transition: all 1s ease;
 }
 
 .front {
-    transform: rotateY(0deg);
+   transform: rotateY(0deg);
 }
 
 .back {
-    transform: rotateY(180deg);
+   transform: rotateY(180deg);
 }
 
 .container:hover .front {
-    transform: rotateY(-180deg);
+   transform: rotateY(-180deg);
 }
 
 .container:hover .back {
-    transform: rotateY(0deg);
+   transform: rotateY(0deg);
+}
+
+.type {
+   max-width: 10px;
 }
