@@ -86,8 +86,8 @@ export default function Pokemon() {
                   {listPkm &&
                      listPkm.map((pkm, index) => {
                         return (
-                           <a href={'pokemon/' + pkm.id.toString()} key={index}>
-                              {/* <div key={index}> */}
+                           // <a href={'pokemon/' + pkm.id.toString()} key={index}>
+                           <div key={index}>
                               <GridItem className={s.container}>
                                  <div className={s.front}>
                                     <Box borderWidth="1px" borderRadius="lg">
@@ -174,7 +174,7 @@ export default function Pokemon() {
                                     </Box>
                                  </div>
                               </GridItem>
-                           </a>
+                           </div>
                         )
                      })}
                </Grid>
