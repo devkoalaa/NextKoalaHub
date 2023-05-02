@@ -1,6 +1,6 @@
-import Head from 'next/head'
-import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.scss'
+import { Inter } from 'next/font/google'
+import Head from 'next/head'
 import Link from 'next/link'
 
 const inter = Inter({ subsets: ['latin'] })

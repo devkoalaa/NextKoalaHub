@@ -86,7 +86,7 @@ export default function Pokemon() {
         <Container>
             <Container>
                 <form onSubmit={searchPkm}>
-                    <Stack direction={'row'} paddingY="10px">
+                    <Stack direction={'row'} paddingY="20px">
                         <Input
                             autoFocus
                             value={searchedPkm}
