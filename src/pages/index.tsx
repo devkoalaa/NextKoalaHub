@@ -25,19 +25,9 @@ export default function Home() {
             </div>
 
             <div className={styles.grid}>
-               <Link
-                  href="/fortnite"
-                  className={styles.card}
-                  rel="noopener noreferrer"
-               >
+               <Link href="" className={styles.card} rel="noopener noreferrer">
                   <h2 className={inter.className}>
-                     Fortnite <span>-&gt;</span>
-                  </h2>
-               </Link>
-
-               <Link href="/" className={styles.card} rel="noopener noreferrer">
-                  <h2 className={inter.className}>
-                     SSP LIB <span>-&gt;</span>
+                     Console! <span>-&gt;</span>
                   </h2>
                </Link>
 
@@ -51,9 +41,15 @@ export default function Home() {
                   </h2>
                </Link>
 
-               <Link href="/uno" className={styles.card}>
+               <Link href="" className={styles.card} rel="noopener noreferrer">
                   <h2 className={inter.className}>
-                     Onde estacionei meu Uno? <span>-&gt;</span>
+                     Fortnite (Em breve)<span>-&gt;</span>
+                  </h2>
+               </Link>
+
+               <Link href="" className={styles.card}>
+                  <h2 className={inter.className}>
+                     Onde estacionei meu Uno? (Em breve)<span>-&gt;</span>
                   </h2>
                </Link>
             </div>
