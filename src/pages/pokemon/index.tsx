@@ -10,6 +10,7 @@ import {
    FormHelperText,
    Grid,
    GridItem,
+   IconButton,
    Image,
    Input,
    Stack,
@@ -24,6 +25,7 @@ export default function Pokemon() {
    const [pkm, setPkm] = useState<PkmInterface>()
    const [listPkm, setListPkm] = useState<PkmInterface[]>([])
    const [searchedPkm, setSearchedPkm] = useState('')
+   const [errorMsg, setErrorMsg] = useState('')
    const [isError, setIsError] = useState(false)
    const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -33,49 +35,31 @@ export default function Pokemon() {
    }, [])
 
    useEffect(() => {
+      pkm && setListPkm((e) => [pkm, ...e])
+   }, [pkm])
+
+   useEffect(() => {
       if (listPkm.length <= 0) return
       localStorage.setItem('@NKH:listPkm', JSON.stringify(listPkm))
-      setIsSubmitting(false)
    }, [listPkm])
 
    const searchPkm = async (event: any) => {
       event.preventDefault()
-
       setIsSubmitting(true)
+      !searchedPkm && setIsError(true), setErrorMsg('Digite o nome do Pokémon')
 
-      const result = await PokemonApi(searchedPkm)
+      if (searchedPkm) {
+         const result = await PokemonApi(searchedPkm)
 
-      result.hasOwnProperty('abilities') && setPkm(result)
-      result.hasOwnProperty('isError') && setIsSubmitting(result.isSubmitting),
-         setIsError(result.isError)
-
-      // setPkm(await PokemonApi(searchedPkm))
-
-      setSearchedPkm('')
-   }
-
-   const searchPkm2 = async () => {
-      setIsSubmitting(true)
-
-      const result = await PokemonApi(searchedPkm)
-
-      result.hasOwnProperty('abilities') && setPkm(result)
-      result.hasOwnProperty('isError') && setIsSubmitting(result.isSubmitting),
-         setIsError(result.isError)
-
-      // setPkm(await PokemonApi(searchedPkm))
-
-      setSearchedPkm('')
-   }
-
-   useEffect(() => {
-      pkm && setListPkm((e) => [pkm, ...e])
-   }, [pkm])
-
-   const handleKey = (e: React.KeyboardEvent) => {
-      if (e.key === 'Enter') {
-         searchPkm2()
+         result.hasOwnProperty('abilities') && setPkm(result)
+         result.hasOwnProperty('isError') &&
+            setIsSubmitting(result.isSubmitting),
+            setIsError(result.isError),
+            setErrorMsg(result.errorMsg)
       }
+
+      setSearchedPkm('')
+      setIsSubmitting(false)
    }
 
    return (
@@ -83,39 +67,40 @@ export default function Pokemon() {
          <Head>
             <title>Koala Hub | Pokemon</title>
          </Head>
-         <FormControl isInvalid={isError} onSubmit={searchPkm}>
-            <Stack direction={'row'} paddingY="20px">
-               <Stack>
-                  <Input
-                     autoFocus
-                     onFocus={() => setIsError(false)}
-                     value={searchedPkm}
-                     placeholder="Adicionar Pokémon!"
-                     onChange={(e) =>
-                        setSearchedPkm(e.target.value.toLowerCase())
-                     }
-                     onKeyUp={(e) => handleKey(e)}
+         <FormControl isInvalid={isError}>
+            <form onSubmit={searchPkm}>
+               <Stack direction={'row'} paddingY="20px">
+                  <Stack width={'100%'}>
+                     <Input
+                        autoFocus
+                        onFocus={() => setIsError(false)}
+                        value={searchedPkm}
+                        placeholder="Adicionar Pokémon!"
+                        onChange={(e) =>
+                           setSearchedPkm(e.target.value.toLowerCase())
+                        }
+                     />
+                     {isError && (
+                        <FormErrorMessage>{errorMsg}</FormErrorMessage>
+                     )}
+                  </Stack>
+                  <IconButton
+                     icon={<AddIcon />}
+                     colorScheme="blue"
+                     isLoading={isSubmitting}
+                     aria-label="Add Pkm"
+                     onClick={searchPkm}
                   />
-                  {isError && (
-                     <FormErrorMessage>Pokémon não encontrado</FormErrorMessage>
-                  )}
+                  <IconButton
+                     icon={<DeleteIcon />}
+                     colorScheme="red"
+                     aria-label="Delete All Pkm"
+                     onClick={() => {
+                        setListPkm([]), localStorage.clear()
+                     }}
+                  />
                </Stack>
-               <Button
-                  colorScheme="blue"
-                  onClick={searchPkm}
-                  isLoading={isSubmitting}
-               >
-                  <AddIcon />
-               </Button>
-               <Button
-                  colorScheme="red"
-                  onClick={() => {
-                     setListPkm([]), localStorage.clear()
-                  }}
-               >
-                  <DeleteIcon />
-               </Button>
-            </Stack>
+            </form>
          </FormControl>
          <Container>
             <Center>
@@ -134,94 +119,94 @@ export default function Pokemon() {
                      listPkm.map((pkm, index) => {
                         return (
                            // <a href={'pokemon/' + pkm.id.toString()} key={index}>
-                           <div key={index}>
-                              <GridItem className={s.container}>
-                                 <div className={s.front}>
-                                    <Box borderWidth="1px" borderRadius="lg">
-                                       <Image
-                                          src={
-                                             pkm.sprites.other[
-                                                'official-artwork'
-                                             ].front_default
-                                          }
-                                          alt={pkm.name}
-                                       />
-                                       <Box p="2">
-                                          <Box
-                                             className={s.type}
-                                             alignItems="space-between"
-                                          >
-                                             <Stack direction={'row'}>
-                                                {pkm.types.map((type) => {
-                                                   return (
-                                                      <Badge
-                                                         borderRadius="full"
-                                                         colorScheme="teal"
-                                                         px="2"
-                                                         key={type.slot}
-                                                      >
-                                                         {type.type.name}
-                                                      </Badge>
-                                                   )
-                                                })}
-                                             </Stack>
-                                          </Box>
-                                          <Box
-                                             fontWeight="semibold"
-                                             lineHeight="tight"
-                                             noOfLines={1}
-                                             as="h4"
-                                             ml="2"
-                                          >
-                                             {pkm.name}
-                                          </Box>
-                                       </Box>
+                           <GridItem key={index} className={s.container}>
+                              <Box
+                                 className={s.front}
+                                 borderWidth="1px"
+                                 borderRadius="lg"
+                              >
+                                 <Image
+                                    p={2}
+                                    alt={pkm.name}
+                                    src={
+                                       pkm.sprites.other['official-artwork']
+                                          .front_default
+                                    }
+                                 />
+                                 <Box p="2">
+                                    <Box
+                                       className={s.type}
+                                       alignItems="space-between"
+                                    >
+                                       <Stack direction={'row'}>
+                                          {pkm.types.map((type) => {
+                                             return (
+                                                <Badge
+                                                   borderRadius="full"
+                                                   colorScheme="teal"
+                                                   px="2"
+                                                   key={type.slot}
+                                                >
+                                                   {type.type.name}
+                                                </Badge>
+                                             )
+                                          })}
+                                       </Stack>
                                     </Box>
-                                 </div>
-                                 <div className={s.back}>
-                                    <Box borderWidth="1px" borderRadius="lg">
-                                       <Image
-                                          src={
-                                             pkm.sprites.other[
-                                                'official-artwork'
-                                             ].front_shiny
-                                          }
-                                          alt={pkm.name}
-                                       />
-                                       <Box p="2">
-                                          <Box
-                                             className={s.type}
-                                             alignItems="space-between"
-                                          >
-                                             <Stack direction={'row'}>
-                                                {pkm.types.map((type) => {
-                                                   return (
-                                                      <Badge
-                                                         borderRadius="full"
-                                                         colorScheme="teal"
-                                                         px="2"
-                                                         key={type.slot}
-                                                      >
-                                                         {type.type.name}
-                                                      </Badge>
-                                                   )
-                                                })}
-                                             </Stack>
-                                          </Box>
-                                          <Box
-                                             fontWeight="semibold"
-                                             lineHeight="tight"
-                                             noOfLines={1}
-                                             as="h4"
-                                             ml="2"
-                                          >
-                                             {pkm.name}
-                                          </Box>
-                                       </Box>
+                                    <Box
+                                       fontWeight="semibold"
+                                       noOfLines={1}
+                                       ml="2"
+                                    >
+                                       {pkm.name}
                                     </Box>
-                                 </div>
-                              </GridItem>
-                           </div>
+                                 </Box>
+                              </Box>
+                              <Box
+                                 className={s.back}
+                                 borderWidth="1px"
+                                 borderRadius="lg"
+                              >
+                                 <Image
+                                    p={2}
+                                    alt={pkm.name}
+                                    src={
+                                       pkm.sprites.other['official-artwork']
+                                          .front_shiny
+                                    }
+                                 />
+                                 <Box p="2">
+                                    <Box
+                                       className={s.type}
+                                       alignItems="space-between"
+                                    >
+                                       <Stack direction={'row'}>
+                                          {pkm.types.map((type) => {
+                                             return (
+                                                <Badge
+                                                   borderRadius="full"
+                                                   colorScheme="teal"
+                                                   px="2"
+                                                   key={type.slot}
+                                                >
+                                                   {type.type.name}
+                                                </Badge>
+                                             )
+                                          })}
+                                       </Stack>
+                                    </Box>
+                                    <Box
+                                       fontWeight="semibold"
+                                       lineHeight="tight"
+                                       noOfLines={1}
+                                       as="h4"
+                                       ml="2"
+                                    >
+                                       {pkm.name}
+                                    </Box>
+                                 </Box>
+                              </Box>
+                           </GridItem>
                         )
                      })}
                </Grid>

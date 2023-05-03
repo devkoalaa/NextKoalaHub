@@ -11,6 +11,10 @@ export async function PokemonApi(id: string) {
          name: data.name[0].toUpperCase() + data.name.substring(1),
       }
    } catch {
-      return { isSubmitting: false, isError: true }
+      return {
+         isSubmitting: false,
+         isError: true,
+         errorMsg: 'Pokémon não encontrado',
+      }
    }
 }
