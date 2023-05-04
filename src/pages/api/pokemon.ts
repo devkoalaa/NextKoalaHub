@@ -12,7 +12,6 @@ export async function PokemonApi(id: string) {
       }
    } catch {
       return {
-         isSubmitting: false,
          isError: true,
          errorMsg: 'Pokémon não encontrado',
       }

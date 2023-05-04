@@ -51,14 +51,17 @@ export default function Pokemon() {
       if (searchedPkm) {
          const result = await PokemonApi(searchedPkm)
 
-         result.hasOwnProperty('abilities') && setPkm(result)
-         result.hasOwnProperty('isError') &&
-            setIsSubmitting(result.isSubmitting),
-            setIsError(result.isError),
+         if (result.hasOwnProperty('isError')) {
+            setIsError(result.isError)
             setErrorMsg(result.errorMsg)
+         }
+
+         if (result.hasOwnProperty('abilities')) {
+            setPkm(result)
+            setSearchedPkm('')
+         }
       }
 
-      setSearchedPkm('')
       setIsSubmitting(false)
    }
 
@@ -76,9 +79,10 @@ export default function Pokemon() {
                         onFocus={() => setIsError(false)}
                         value={searchedPkm}
                         placeholder="Adicionar Pokémon!"
-                        onChange={(e) =>
-                           setSearchedPkm(e.target.value.toLowerCase())
-                        }
+                        onChange={(e) => {
+                           setSearchedPkm(e.target.value.toLowerCase()),
+                              setIsError(false)
+                        }}
                      />
                      {isError && (
                         <FormErrorMessage>{errorMsg}</FormErrorMessage>
@@ -153,11 +157,7 @@ export default function Pokemon() {
                                           })}
                                        </Stack>
                                     </Box>
-                                    <Box
-                                       fontWeight="semibold"
-                                       noOfLines={1}
-                                       ml="2"
-                                    >
+                                    <Box fontWeight="semibold" ml="2">
                                        {pkm.name}
                                     </Box>
                                  </Box>
@@ -195,13 +195,7 @@ export default function Pokemon() {
                                           })}
                                        </Stack>
                                     </Box>
-                                    <Box
-                                       fontWeight="semibold"
-                                       lineHeight="tight"
-                                       noOfLines={1}
-                                       as="h4"
-                                       ml="2"
-                                    >
+                                    <Box fontWeight="semibold" ml="2">
                                        {pkm.name}
                                     </Box>
                                  </Box>
