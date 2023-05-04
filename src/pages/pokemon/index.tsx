@@ -1,5 +1,12 @@
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons'
 import {
+   AlertDialog,
+   AlertDialogBody,
+   AlertDialogCloseButton,
+   AlertDialogContent,
+   AlertDialogFooter,
+   AlertDialogHeader,
+   AlertDialogOverlay,
    Badge,
    Box,
    Button,
@@ -7,16 +14,16 @@ import {
    Container,
    FormControl,
    FormErrorMessage,
-   FormHelperText,
    Grid,
    GridItem,
    IconButton,
    Image,
    Input,
    Stack,
+   useDisclosure,
 } from '@chakra-ui/react'
 import Head from 'next/head'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { PkmInterface } from '../../interfaces/PkmInterface'
 import { PokemonApi } from '../api/pokemon'
 import s from './styles.module.scss'
@@ -28,6 +35,8 @@ export default function Pokemon() {
    const [errorMsg, setErrorMsg] = useState('')
    const [isError, setIsError] = useState(false)
    const [isSubmitting, setIsSubmitting] = useState(false)
+   const { isOpen, onOpen, onClose } = useDisclosure()
+   const cancelRef = useRef<any>()
 
    useEffect(() => {
       const storageListPkm = localStorage.getItem('@NKH:listPkm')
@@ -100,10 +109,43 @@ export default function Pokemon() {
                      colorScheme="red"
                      aria-label="Delete All Pkm"
                      onClick={() => {
-                        setListPkm([]), localStorage.clear()
+                        onOpen()
                      }}
                   />
                </Stack>
+               <Container margin={2}>
+                  <AlertDialog
+                     size={{ base: 'xs', md: 'lg' }}
+                     motionPreset="slideInBottom"
+                     leastDestructiveRef={cancelRef}
+                     onClose={onClose}
+                     isOpen={isOpen}
+                     isCentered
+                  >
+                     <AlertDialogOverlay />
+                     <AlertDialogContent>
+                        <AlertDialogHeader>Limpar lista</AlertDialogHeader>
+                        <AlertDialogCloseButton />
+                        <AlertDialogBody>
+                           Tem certeza que deseja limpar a lista de Pokémons?
+                        </AlertDialogBody>
+                        <AlertDialogFooter>
+                           <Button ref={cancelRef} onClick={onClose}>
+                              Não
+                           </Button>
+                           <Button
+                              colorScheme="red"
+                              ml={3}
+                              onClick={(e) => {
+                                 localStorage.clear(), setListPkm([]), onClose()
+                              }}
+                           >
+                              Sim
+                           </Button>
+                        </AlertDialogFooter>
+                     </AlertDialogContent>
+                  </AlertDialog>
+               </Container>
             </form>
          </FormControl>
          <Container>
