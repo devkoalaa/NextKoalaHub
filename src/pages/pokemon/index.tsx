@@ -19,6 +19,7 @@ import {
    IconButton,
    Image,
    Input,
+   ScaleFade,
    Stack,
    useDisclosure,
 } from '@chakra-ui/react'
@@ -35,7 +36,17 @@ export default function Pokemon() {
    const [errorMsg, setErrorMsg] = useState('')
    const [isError, setIsError] = useState(false)
    const [isSubmitting, setIsSubmitting] = useState(false)
-   const { isOpen, onOpen, onClose } = useDisclosure()
+   const {
+      isOpen: isOpenDialog,
+      onOpen: onOpenDialog,
+      onClose: onCloseDialog,
+   } = useDisclosure()
+   const {
+      isOpen: isOpenFade,
+      onOpen: onOpenFade,
+      onClose: onCloseFade,
+      onToggle: onToggleFade,
+   } = useDisclosure()
    const cancelRef = useRef<any>()
 
    useEffect(() => {
@@ -44,13 +55,14 @@ export default function Pokemon() {
    }, [])
 
    useEffect(() => {
-      pkm && setListPkm((e) => [pkm, ...e])
+      pkm && setListPkm((e) => [...e, pkm])
    }, [pkm])
 
    useEffect(() => {
       if (listPkm.length <= 0) return
       localStorage.setItem('@NKH:listPkm', JSON.stringify(listPkm))
-   }, [listPkm])
+      onOpenFade()
+   }, [listPkm, onOpenFade])
 
    const searchPkm = async (event: any) => {
       event.preventDefault()
@@ -109,7 +121,7 @@ export default function Pokemon() {
                      colorScheme="red"
                      aria-label="Delete All Pkm"
                      onClick={() => {
-                        onOpen()
+                        onOpenDialog()
                      }}
                   />
                </Stack>
@@ -118,8 +130,8 @@ export default function Pokemon() {
                      size={{ base: 'xs', md: 'lg' }}
                      motionPreset="slideInBottom"
                      leastDestructiveRef={cancelRef}
-                     onClose={onClose}
-                     isOpen={isOpen}
+                     onClose={onCloseDialog}
+                     isOpen={isOpenDialog}
                      isCentered
                   >
                      <AlertDialogOverlay />
@@ -130,14 +142,16 @@ export default function Pokemon() {
                            Tem certeza que deseja limpar a lista de Pokémons?
                         </AlertDialogBody>
                         <AlertDialogFooter>
-                           <Button ref={cancelRef} onClick={onClose}>
+                           <Button ref={cancelRef} onClick={onCloseDialog}>
                               Não
                            </Button>
                            <Button
                               colorScheme="red"
                               ml={3}
                               onClick={(e) => {
-                                 localStorage.clear(), setListPkm([]), onClose()
+                                 localStorage.clear(),
+                                    setListPkm([]),
+                                    onCloseDialog()
                               }}
                            >
                               Sim
@@ -148,24 +162,28 @@ export default function Pokemon() {
                </Container>
             </form>
          </FormControl>
-         <Container>
-            <Center>
-               <Grid
-                  templateColumns={{
-                     base: 'repeat(2, 1fr)',
-                     sm: 'repeat(3, 1fr)',
-                     md: 'repeat(4, 1fr)',
-                     lg: 'repeat(5, 1fr)',
-                     xl: 'repeat(6, 1fr)',
-                     '2xl': 'repeat(8, 1fr)',
-                  }}
-                  gap={3}
-               >
-                  {listPkm &&
-                     listPkm.map((pkm, index) => {
-                        return (
-                           // <a href={'pokemon/' + pkm.id.toString()} key={index}>
-                           <GridItem key={index} className={s.container}>
+
+         <Center>
+            <Grid
+               templateColumns={{
+                  base: 'repeat(2, 1fr)',
+                  sm: 'repeat(3, 1fr)',
+                  md: 'repeat(4, 1fr)',
+                  lg: 'repeat(5, 1fr)',
+                  xl: 'repeat(6, 1fr)',
+                  '2xl': 'repeat(8, 1fr)',
+               }}
+               gap={3}
+            >
+               {listPkm &&
+                  listPkm.map((pkm, index) => {
+                     return (
+                        <ScaleFade
+                           initialScale={0.9}
+                           key={index}
+                           in={isOpenFade}
+                        >
+                           <GridItem className={s.container}>
                               <Box
                                  className={s.front}
                                  borderWidth="1px"
@@ -243,11 +261,11 @@ export default function Pokemon() {
                                  </Box>
                               </Box>
                            </GridItem>
-                        )
-                     })}
-               </Grid>
-            </Center>
-         </Container>
+                        </ScaleFade>
+                     )
+                  })}
+            </Grid>
+         </Center>
       </Container>
    )
 }
