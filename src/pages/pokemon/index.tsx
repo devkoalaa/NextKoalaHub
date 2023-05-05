@@ -20,6 +20,7 @@ import {
    Image,
    Input,
    ScaleFade,
+   Skeleton,
    Stack,
    useDisclosure,
 } from '@chakra-ui/react'
@@ -33,6 +34,7 @@ export default function Pokemon() {
    const [pkm, setPkm] = useState<PkmInterface>()
    const [listPkm, setListPkm] = useState<PkmInterface[]>([])
    const [searchedPkm, setSearchedPkm] = useState('')
+   const [isLoaded, setIsLoaded] = useState(false)
    const [errorMsg, setErrorMsg] = useState('')
    const [isError, setIsError] = useState(false)
    const [isSubmitting, setIsSubmitting] = useState(false)
@@ -51,11 +53,14 @@ export default function Pokemon() {
 
    useEffect(() => {
       const storageListPkm = localStorage.getItem('@NKH:listPkm')
-      storageListPkm && setListPkm(JSON.parse(storageListPkm))
+      if (storageListPkm) {
+         setListPkm(JSON.parse(storageListPkm))
+         setIsLoaded(true)
+      }
    }, [])
 
    useEffect(() => {
-      pkm && setListPkm((e) => [...e, pkm])
+      pkm && setListPkm((e) => [pkm, ...e])
    }, [pkm])
 
    useEffect(() => {
@@ -82,7 +87,6 @@ export default function Pokemon() {
             setSearchedPkm('')
          }
       }
-
       setIsSubmitting(false)
    }
 
@@ -179,88 +183,91 @@ export default function Pokemon() {
                   listPkm.map((pkm, index) => {
                      return (
                         <ScaleFade
-                           initialScale={0.9}
                            key={index}
+                           initialScale={0.9}
                            in={isOpenFade}
                         >
-                           <GridItem className={s.container}>
-                              <Box
-                                 className={s.front}
-                                 borderWidth="1px"
-                                 borderRadius="lg"
-                              >
-                                 <Image
-                                    p={2}
-                                    alt={pkm.name}
-                                    src={
-                                       pkm.sprites.other['official-artwork']
-                                          .front_default
-                                    }
-                                 />
-                                 <Box p="2">
-                                    <Box
-                                       className={s.type}
-                                       alignItems="space-between"
-                                    >
-                                       <Stack direction={'row'}>
-                                          {pkm.types.map((type) => {
-                                             return (
-                                                <Badge
-                                                   borderRadius="full"
-                                                   colorScheme="teal"
-                                                   px="2"
-                                                   key={type.slot}
-                                                >
-                                                   {type.type.name}
-                                                </Badge>
-                                             )
-                                          })}
-                                       </Stack>
-                                    </Box>
-                                    <Box fontWeight="semibold" ml="2">
-                                       {pkm.name}
-                                    </Box>
-                                 </Box>
-                              </Box>
-                              <Box
-                                 className={s.back}
-                                 borderWidth="1px"
-                                 borderRadius="lg"
-                              >
-                                 <Image
-                                    p={2}
-                                    alt={pkm.name}
-                                    src={
-                                       pkm.sprites.other['official-artwork']
-                                          .front_shiny
-                                    }
-                                 />
-                                 <Box p="2">
-                                    <Box
-                                       className={s.type}
-                                       alignItems="space-between"
-                                    >
-                                       <Stack direction={'row'}>
-                                          {pkm.types.map((type) => {
-                                             return (
-                                                <Badge
-                                                   borderRadius="full"
-                                                   colorScheme="teal"
-                                                   px="2"
-                                                   key={type.slot}
-                                                >
-                                                   {type.type.name}
-                                                </Badge>
-                                             )
-                                          })}
-                                       </Stack>
-                                    </Box>
-                                    <Box fontWeight="semibold" ml="2">
-                                       {pkm.name}
+                           <Skeleton isLoaded={isLoaded} fadeDuration={1}>
+                              <GridItem className={s.container}>
+                                 <Box
+                                    className={s.front}
+                                    borderWidth="1px"
+                                    borderRadius="lg"
+                                 >
+                                    <Image
+                                       fallbackSrc="/imgPlaceHolder.png"
+                                       p={2}
+                                       alt={pkm.name}
+                                       src={
+                                          pkm.sprites.other['official-artwork']
+                                             .front_default
+                                       }
+                                    />
+                                    <Box p="2">
+                                       <Box
+                                          className={s.type}
+                                          alignItems="space-between"
+                                       >
+                                          <Stack direction={'row'}>
+                                             {pkm.types.map((type) => {
+                                                return (
+                                                   <Badge
+                                                      borderRadius="full"
+                                                      colorScheme="teal"
+                                                      px="2"
+                                                      key={type.slot}
+                                                   >
+                                                      {type.type.name}
+                                                   </Badge>
+                                                )
+                                             })}
+                                          </Stack>
+                                       </Box>
+                                       <Box fontWeight="semibold" ml="2">
+                                          {pkm.name}
+                                       </Box>
                                     </Box>
                                  </Box>
-                              </Box>
-                           </GridItem>
+                                 <Box
+                                    className={s.back}
+                                    borderWidth="1px"
+                                    borderRadius="lg"
+                                 >
+                                    <Image
+                                       p={2}
+                                       alt={pkm.name}
+                                       src={
+                                          pkm.sprites.other['official-artwork']
+                                             .front_shiny
+                                       }
+                                    />
+                                    <Box p="2">
+                                       <Box
+                                          className={s.type}
+                                          alignItems="space-between"
+                                       >
+                                          <Stack direction={'row'}>
+                                             {pkm.types.map((type) => {
+                                                return (
+                                                   <Badge
+                                                      borderRadius="full"
+                                                      colorScheme="teal"
+                                                      px="2"
+                                                      key={type.slot}
+                                                   >
+                                                      {type.type.name}
+                                                   </Badge>
+                                                )
+                                             })}
+                                          </Stack>
+                                       </Box>
+                                       <Box fontWeight="semibold" ml="2">
+                                          {pkm.name}
+                                       </Box>
+                                    </Box>
+                                 </Box>
+                              </GridItem>
+                           </Skeleton>
                         </ScaleFade>
                      )
                   })}
