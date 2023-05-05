@@ -37,7 +37,7 @@ export default function Pokemon() {
    const [isLoaded, setIsLoaded] = useState(false)
    const [errorMsg, setErrorMsg] = useState('')
    const [isError, setIsError] = useState(false)
-   const [focusBorderColor, setFocusBorderColor] = useState('red.300')
+   const [focusBorderColor, setFocusBorderColor] = useState('blue.300')
    const [isSubmitting, setIsSubmitting] = useState(false)
    const {
       isOpen: isOpenDialog,
