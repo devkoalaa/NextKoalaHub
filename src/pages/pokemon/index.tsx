@@ -182,13 +182,9 @@ export default function Pokemon() {
                {listPkm &&
                   listPkm.map((pkm, index) => {
                      return (
-                        <ScaleFade
-                           key={index}
-                           initialScale={0.9}
-                           in={isOpenFade}
-                        >
-                           <Skeleton isLoaded={isLoaded} fadeDuration={1}>
-                              <GridItem className={s.container}>
+                        <ScaleFade key={index} initialScale={1} in={isOpenFade}>
+                           <GridItem className={s.container}>
+                              <Skeleton isLoaded={isLoaded} fadeDuration={1}>
                                  <Box
                                     className={s.front}
                                     borderWidth="1px"
@@ -234,6 +230,7 @@ export default function Pokemon() {
                                     borderRadius="lg"
                                  >
                                     <Image
+                                       fallbackSrc="/imgPlaceHolder.png"
                                        p={2}
                                        alt={pkm.name}
                                        src={
@@ -266,8 +263,8 @@ export default function Pokemon() {
                                        </Box>
                                     </Box>
                                  </Box>
-                              </GridItem>
-                           </Skeleton>
+                              </Skeleton>
+                           </GridItem>
                         </ScaleFade>
                      )
                   })}
