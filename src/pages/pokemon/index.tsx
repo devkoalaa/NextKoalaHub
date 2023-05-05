@@ -21,6 +21,8 @@ import {
    Input,
    ScaleFade,
    Skeleton,
+   SkeletonCircle,
+   SkeletonText,
    Stack,
    useDisclosure,
 } from '@chakra-ui/react'
@@ -55,7 +57,10 @@ export default function Pokemon() {
       const storageListPkm = localStorage.getItem('@NKH:listPkm')
       if (storageListPkm) {
          setListPkm(JSON.parse(storageListPkm))
-         setIsLoaded(true)
+
+         setTimeout(() => {
+            setIsLoaded(true)
+         }, 1000)
       }
    }, [])
 
@@ -183,8 +188,8 @@ export default function Pokemon() {
                   listPkm.map((pkm, index) => {
                      return (
                         <ScaleFade key={index} initialScale={1} in={isOpenFade}>
-                           <GridItem className={s.container}>
-                              <Skeleton isLoaded={isLoaded} fadeDuration={1}>
+                           <Skeleton isLoaded={isLoaded} fadeDuration={1}>
+                              <GridItem className={s.container}>
                                  <Box
                                     className={s.front}
                                     borderWidth="1px"
@@ -263,8 +268,8 @@ export default function Pokemon() {
                                        </Box>
                                     </Box>
                                  </Box>
-                              </Skeleton>
-                           </GridItem>
+                              </GridItem>
+                           </Skeleton>
                         </ScaleFade>
                      )
                   })}
