@@ -21,8 +21,6 @@ import {
    Input,
    ScaleFade,
    Skeleton,
-   SkeletonCircle,
-   SkeletonText,
    Stack,
    useDisclosure,
 } from '@chakra-ui/react'
@@ -39,18 +37,14 @@ export default function Pokemon() {
    const [isLoaded, setIsLoaded] = useState(false)
    const [errorMsg, setErrorMsg] = useState('')
    const [isError, setIsError] = useState(false)
+   const [focusBorderColor, setFocusBorderColor] = useState('red.300')
    const [isSubmitting, setIsSubmitting] = useState(false)
    const {
       isOpen: isOpenDialog,
       onOpen: onOpenDialog,
       onClose: onCloseDialog,
    } = useDisclosure()
-   const {
-      isOpen: isOpenFade,
-      onOpen: onOpenFade,
-      onClose: onCloseFade,
-      onToggle: onToggleFade,
-   } = useDisclosure()
+   const { isOpen: isOpenFade, onOpen: onOpenFade } = useDisclosure()
    const cancelRef = useRef<any>()
 
    useEffect(() => {
@@ -73,6 +67,11 @@ export default function Pokemon() {
       localStorage.setItem('@NKH:listPkm', JSON.stringify(listPkm))
       onOpenFade()
    }, [listPkm, onOpenFade])
+
+   useEffect(() => {
+      isError && setFocusBorderColor('red.300')
+      !isError && setFocusBorderColor('blue.300')
+   }, [isError])
 
    const searchPkm = async (event: any) => {
       event.preventDefault()
@@ -106,6 +105,7 @@ export default function Pokemon() {
                   <Stack width={'100%'}>
                      <Input
                         autoFocus
+                        focusBorderColor={focusBorderColor}
                         onFocus={() => setIsError(false)}
                         value={searchedPkm}
                         placeholder="Adicionar Pokémon!"
