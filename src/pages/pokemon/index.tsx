@@ -129,7 +129,7 @@ setSearchedPkm(Math.floor(Math.random() * 1000) + 1)
                      aria-label="Add Pkm"
                      onClick={searchPkm}
                   />
-<IconButton>
+<IconButton
 icon={<AddIcon>}
 colorScheme="yellow"
 aria-label="Random Pkm"
