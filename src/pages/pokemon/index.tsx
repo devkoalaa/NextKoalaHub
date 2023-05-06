@@ -1,4 +1,4 @@
-import { AddIcon, DeleteIcon } from '@chakra-ui/icons'
+import { AddIcon, DeleteIcon, QuestionIcon } from '@chakra-ui/icons'
 import {
    AlertDialog,
    AlertDialogBody,
@@ -21,6 +21,7 @@ import {
    Input,
    ScaleFade,
    Skeleton,
+   SkeletonText,
    Stack,
    useDisclosure,
 } from '@chakra-ui/react'
@@ -38,7 +39,8 @@ export default function Pokemon() {
    const [errorMsg, setErrorMsg] = useState('')
    const [isError, setIsError] = useState(false)
    const [focusBorderColor, setFocusBorderColor] = useState('blue.300')
-   const [isSubmitting, setIsSubmitting] = useState(false)
+   const [btnAddPkmSubmitting, setBtnAddPkmSubmitting] = useState(false)
+   const [btnRdmPkmSubmitting, setBtnRdmPkmSubmitting] = useState(false)
    const {
       isOpen: isOpenDialog,
       onOpen: onOpenDialog,
@@ -51,11 +53,10 @@ export default function Pokemon() {
       const storageListPkm = localStorage.getItem('@NKH:listPkm')
       if (storageListPkm) {
          setListPkm(JSON.parse(storageListPkm))
-
-         setTimeout(() => {
-            setIsLoaded(true)
-         }, 1000)
       }
+      setTimeout(() => {
+         setIsLoaded(true)
+      }, 1000)
    }, [])
 
    useEffect(() => {
@@ -73,14 +74,14 @@ export default function Pokemon() {
       !isError && setFocusBorderColor('blue.300')
    }, [isError])
 
-const handleRandomPkm = () => {
-setSearchedPkm(Math.floor(Math.random() * 1000) + 1)
-
-}
    const searchPkm = async (event: any) => {
       event.preventDefault()
-      setIsSubmitting(true)
-      !searchedPkm && setIsError(true), setErrorMsg('Digite o nome do Pokémon')
+      setBtnAddPkmSubmitting(true)
+
+      if (!searchedPkm) {
+         setIsError(true)
+         setErrorMsg('Digite o nome do Pokémon')
+      }
 
       if (searchedPkm) {
          const result = await PokemonApi(searchedPkm)
@@ -95,7 +96,16 @@ setSearchedPkm(Math.floor(Math.random() * 1000) + 1)
             setSearchedPkm('')
          }
       }
-      setIsSubmitting(false)
+
+      setBtnAddPkmSubmitting(false)
+      setIsLoaded(true)
+   }
+
+   const addRandomPkm = async (id: string) => {
+      setBtnRdmPkmSubmitting(true)
+      const result = await PokemonApi(id)
+      setPkm(result)
+      setBtnRdmPkmSubmitting(false)
    }
 
    return (
@@ -125,15 +135,21 @@ setSearchedPkm(Math.floor(Math.random() * 1000) + 1)
                   <IconButton
                      icon={<AddIcon />}
                      colorScheme="blue"
-                     isLoading={isSubmitting}
+                     isLoading={btnAddPkmSubmitting}
                      aria-label="Add Pkm"
                      onClick={searchPkm}
                   />
-<IconButton
-icon={<AddIcon>}
-colorScheme="yellow"
-aria-label="Random Pkm"
-onClick={handleRandomPkm}/>
+                  <IconButton
+                     icon={<QuestionIcon />}
+                     colorScheme="yellow"
+                     aria-label="Random Pkm"
+                     isLoading={btnRdmPkmSubmitting}
+                     onClick={() => {
+                        addRandomPkm(
+                           (Math.floor(Math.random() * 1000) + 1).toString()
+                        )
+                     }}
+                  />
                   <IconButton
                      icon={<DeleteIcon />}
                      colorScheme="red"
@@ -166,8 +182,8 @@ onClick={handleRandomPkm}/>
                            <Button
                               colorScheme="red"
                               ml={3}
-                              onClick={(e) => {
-                                 localStorage.clear(),
+                              onClick={() => {
+                                 localStorage.setItem('@NKH:listPkm', ''),
                                     setListPkm([]),
                                     onCloseDialog()
                               }}
@@ -200,11 +216,14 @@ onClick={handleRandomPkm}/>
                            <Skeleton
                               isLoaded={isLoaded}
                               fadeDuration={1}
-                              borderWidth="1px"
                               borderRadius="lg"
                            >
                               <GridItem className={s.container}>
-                                 <Box className={s.front}>
+                                 <Box
+                                    className={s.front}
+                                    borderWidth="1px"
+                                    borderRadius="lg"
+                                 >
                                     <Image
                                        fallbackSrc="/imgPlaceHolder.png"
                                        p={2}
@@ -239,7 +258,11 @@ onClick={handleRandomPkm}/>
                                        </Box>
                                     </Box>
                                  </Box>
-                                 <Box className={s.back}>
+                                 <Box
+                                    className={s.back}
+                                    borderWidth="1px"
+                                    borderRadius="lg"
+                                 >
                                     <Image
                                        fallbackSrc="/imgPlaceHolder.png"
                                        p={2}
