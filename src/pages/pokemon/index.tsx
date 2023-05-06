@@ -73,6 +73,10 @@ export default function Pokemon() {
       !isError && setFocusBorderColor('blue.300')
    }, [isError])
 
+const handleRandomPkm = () => {
+setSearchedPkm(Math.floor(Math.random() * 1000) + 1)
+
+}
    const searchPkm = async (event: any) => {
       event.preventDefault()
       setIsSubmitting(true)
@@ -125,6 +129,11 @@ export default function Pokemon() {
                      aria-label="Add Pkm"
                      onClick={searchPkm}
                   />
+<IconButton>
+icon={<AddIcon>}
+colorScheme="yellow"
+aria-label="Random Pkm"
+onClick={handleRandomPkm}/>
                   <IconButton
                      icon={<DeleteIcon />}
                      colorScheme="red"
