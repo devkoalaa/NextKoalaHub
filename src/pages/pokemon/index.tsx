@@ -1,4 +1,9 @@
-import { SearchIcon, DeleteIcon, QuestionIcon } from '@chakra-ui/icons'
+import {
+   SearchIcon,
+   DeleteIcon,
+   QuestionIcon,
+   StarIcon,
+} from '@chakra-ui/icons'
 import {
    AlertDialog,
    AlertDialogBody,
@@ -51,6 +56,7 @@ export default function Pokemon() {
    const [focusBorderColor, setFocusBorderColor] = useState('blue.300')
    const [btnAddPkmSubmitting, setBtnAddPkmSubmitting] = useState(false)
    const [btnRdmPkmSubmitting, setBtnRdmPkmSubmitting] = useState(false)
+   const [showSprite, setShowSprite] = useState(true)
    const { isOpen: isOpenFade, onOpen: onOpenFade } = useDisclosure()
    const cancelRef = useRef<any>()
    const {
@@ -186,72 +192,88 @@ export default function Pokemon() {
             </form>
          </FormControl>
 
-         <Container margin={2}>
-            <AlertDialog
-               size={{ base: 'xs', md: 'lg' }}
-               leastDestructiveRef={cancelRef}
-               onClose={onCloseDialog}
-               isOpen={isOpenDialog}
-               motionPreset="slideInBottom"
-               isCentered
-            >
-               <AlertDialogOverlay backdropFilter="blur(10px)" />
-               <AlertDialogContent>
-                  <AlertDialogHeader>Limpar lista</AlertDialogHeader>
-                  <AlertDialogCloseButton />
-                  <AlertDialogBody>
-                     Tem certeza que deseja limpar a lista de Pokémons?
-                  </AlertDialogBody>
-                  <AlertDialogFooter>
-                     <Button ref={cancelRef} onClick={onCloseDialog}>
-                        Não
-                     </Button>
-                     <Button
-                        colorScheme="red"
-                        ml={3}
-                        onClick={() => {
-                           localStorage.setItem('@NKH:listPkm', ''),
-                              setListPkm([]),
-                              onCloseDialog()
-                        }}
-                     >
-                        Sim
-                     </Button>
-                  </AlertDialogFooter>
-               </AlertDialogContent>
-            </AlertDialog>
-         </Container>
+         <AlertDialog
+            size={{
+               base: 'xs',
+               sm: 'sm',
+               md: 'md',
+            }}
+            leastDestructiveRef={cancelRef}
+            onClose={onCloseDialog}
+            isOpen={isOpenDialog}
+            motionPreset="slideInBottom"
+            isCentered
+         >
+            <AlertDialogOverlay backdropFilter="blur(10px)" />
+            <AlertDialogContent>
+               <AlertDialogHeader>Limpar lista</AlertDialogHeader>
+               <AlertDialogCloseButton />
+               <AlertDialogBody>
+                  Tem certeza que deseja limpar a lista de Pokémons?
+               </AlertDialogBody>
+               <AlertDialogFooter>
+                  <Button ref={cancelRef} onClick={onCloseDialog}>
+                     Não
+                  </Button>
+                  <Button
+                     colorScheme="red"
+                     ml={3}
+                     onClick={() => {
+                        localStorage.setItem('@NKH:listPkm', ''),
+                           setListPkm([]),
+                           onCloseDialog()
+                     }}
+                  >
+                     Sim
+                  </Button>
+               </AlertDialogFooter>
+            </AlertDialogContent>
+         </AlertDialog>
 
          {pkmSelected && (
             <Modal
                isOpen={isOpenModal}
                onClose={onCloseModal}
-               size={{ base: 'xs', md: 'lg' }}
                motionPreset="slideInRight"
-               isCentered
+               size={{
+                  base: 'xs',
+                  sm: 'sm',
+                  md: 'md',
+               }}
             >
                <ModalOverlay backdropFilter="blur(10px)" />
-               <ModalContent>
-                  <ModalHeader>{pkmSelected?.name}</ModalHeader>
+               <ModalContent paddingBottom={2}>
+                  <ModalHeader>{pkmSelected.name}</ModalHeader>
                   <ModalCloseButton />
                   <ModalBody>
+                     {showSprite && (
+                        <Image
+                           alt={pkmSelected.name}
+                           src={
+                              pkmSelected.sprites.other['official-artwork']
+                                 .front_default
+                           }
+                        />
+                     )}
+                     {!showSprite && (
+                        <Image
+                           alt={pkmSelected.name}
+                           src={
+                              pkmSelected.sprites.other['official-artwork']
+                                 .front_shiny
+                           }
+                        />
+                     )}
+                     <Stack direction={'row'} justifyContent={'end'}>
+                        <IconButton
+                           icon={<StarIcon />}
+                           colorScheme="yellow"
+                           aria-label="Shiny Pkm"
+                           onClick={() => setShowSprite(!showSprite)}
+                        />
+                     </Stack>
                      <Stack divider={<StackDivider />} spacing="2">
                         <Box>
-                           <Image
-                              fallbackSrc="/imgPlaceHolder.png"
-                              p={2}
-                              alt={pkmSelected.name}
-                              src={
-                                 pkmSelected.sprites.other['official-artwork']
-                                    .front_default
-                              }
-                           />
-                           <Image
-                              fallbackSrc="/imgPlaceHolder.png"
-                              p={2}
-                              alt={pkmSelected.name}
-                              src={pkmSelected.sprites.front_default}
-                           />
                            <Heading size="xs" textTransform="uppercase">
                               ID
                            </Heading>
@@ -297,11 +319,6 @@ export default function Pokemon() {
                         </Box>
                      </Stack>
                   </ModalBody>
-                  <ModalFooter>
-                     <Button colorScheme="blue" mr={3} onClick={onCloseModal}>
-                        Fechar
-                     </Button>
-                  </ModalFooter>
                </ModalContent>
             </Modal>
          )}
