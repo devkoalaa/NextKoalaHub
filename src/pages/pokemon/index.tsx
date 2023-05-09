@@ -1,4 +1,4 @@
-import { AddIcon, DeleteIcon, QuestionIcon } from '@chakra-ui/icons'
+import { SearchIcon, DeleteIcon, QuestionIcon } from '@chakra-ui/icons'
 import {
    AlertDialog,
    AlertDialogBody,
@@ -148,7 +148,7 @@ export default function Pokemon() {
                      )}
                   </Stack>
                   <IconButton
-                     icon={<AddIcon />}
+                     icon={<SearchIcon />}
                      colorScheme="blue"
                      isLoading={btnAddPkmSubmitting}
                      aria-label="Add Pkm"
@@ -183,100 +183,128 @@ export default function Pokemon() {
                      }}
                   /> */}
                </Stack>
-               <Container margin={2}>
-                  <AlertDialog
-                     size={{ base: 'xs', md: 'lg' }}
-                     leastDestructiveRef={cancelRef}
-                     onClose={onCloseDialog}
-                     isOpen={isOpenDialog}
-                     motionPreset="slideInBottom"
-                     isCentered
-                  >
-                     <AlertDialogOverlay />
-                     <AlertDialogContent>
-                        <AlertDialogHeader>Limpar lista</AlertDialogHeader>
-                        <AlertDialogCloseButton />
-                        <AlertDialogBody>
-                           Tem certeza que deseja limpar a lista de Pokémons?
-                        </AlertDialogBody>
-                        <AlertDialogFooter>
-                           <Button ref={cancelRef} onClick={onCloseDialog}>
-                              Não
-                           </Button>
-                           <Button
-                              colorScheme="red"
-                              ml={3}
-                              onClick={() => {
-                                 localStorage.setItem('@NKH:listPkm', ''),
-                                    setListPkm([]),
-                                    onCloseDialog()
-                              }}
-                           >
-                              Sim
-                           </Button>
-                        </AlertDialogFooter>
-                     </AlertDialogContent>
-                  </AlertDialog>
-               </Container>
             </form>
          </FormControl>
 
-         <Modal
-            isOpen={isOpenModal}
-            onClose={onCloseModal}
-            size={{ base: 'xs', md: 'lg' }}
-            motionPreset="slideInRight"
-            isCentered
-         >
-            <ModalOverlay />
-            <ModalContent>
-               <ModalHeader>{pkmSelected?.name}</ModalHeader>
-               <ModalCloseButton />
-               <ModalBody>
-                  <Stack divider={<StackDivider />} spacing="4">
-                     <Box>
-                        <Image
-                           fallbackSrc="/imgPlaceHolder.png"
-                           p={2}
-                           alt={pkmSelected?.name}
-                           src={
-                              pkmSelected?.sprites.other['official-artwork']
-                                 .front_default
-                           }
-                        />
-                        <Heading size="xs" textTransform="uppercase">
-                           Número na Dex
-                        </Heading>
-                        <Text pt="2" fontSize="sm">
-                           {pkmSelected?.id}
-                        </Text>
-                     </Box>
-                     <Box>
-                        <Heading size="xs" textTransform="uppercase">
-                           Altura
-                        </Heading>
-                        <Text pt="2" fontSize="sm">
-                           {pkmSelected?.height} m
-                        </Text>
-                     </Box>
-                     <Box>
-                        <Heading size="xs" textTransform="uppercase">
-                           Peso
-                        </Heading>
-                        <Text pt="2" fontSize="sm">
-                           {pkmSelected?.weight} lb
-                        </Text>
-                     </Box>
-                  </Stack>
-               </ModalBody>
+         <Container margin={2}>
+            <AlertDialog
+               size={{ base: 'xs', md: 'lg' }}
+               leastDestructiveRef={cancelRef}
+               onClose={onCloseDialog}
+               isOpen={isOpenDialog}
+               motionPreset="slideInBottom"
+               isCentered
+            >
+               <AlertDialogOverlay backdropFilter="blur(10px)" />
+               <AlertDialogContent>
+                  <AlertDialogHeader>Limpar lista</AlertDialogHeader>
+                  <AlertDialogCloseButton />
+                  <AlertDialogBody>
+                     Tem certeza que deseja limpar a lista de Pokémons?
+                  </AlertDialogBody>
+                  <AlertDialogFooter>
+                     <Button ref={cancelRef} onClick={onCloseDialog}>
+                        Não
+                     </Button>
+                     <Button
+                        colorScheme="red"
+                        ml={3}
+                        onClick={() => {
+                           localStorage.setItem('@NKH:listPkm', ''),
+                              setListPkm([]),
+                              onCloseDialog()
+                        }}
+                     >
+                        Sim
+                     </Button>
+                  </AlertDialogFooter>
+               </AlertDialogContent>
+            </AlertDialog>
+         </Container>
 
-               <ModalFooter>
-                  <Button colorScheme="blue" mr={3} onClick={onCloseModal}>
-                     Fechar
-                  </Button>
-               </ModalFooter>
-            </ModalContent>
-         </Modal>
+         {pkmSelected && (
+            <Modal
+               isOpen={isOpenModal}
+               onClose={onCloseModal}
+               size={{ base: 'xs', md: 'lg' }}
+               motionPreset="slideInRight"
+               isCentered
+            >
+               <ModalOverlay backdropFilter="blur(10px)" />
+               <ModalContent>
+                  <ModalHeader>{pkmSelected?.name}</ModalHeader>
+                  <ModalCloseButton />
+                  <ModalBody>
+                     <Stack divider={<StackDivider />} spacing="2">
+                        <Box>
+                           <Image
+                              fallbackSrc="/imgPlaceHolder.png"
+                              p={2}
+                              alt={pkmSelected.name}
+                              src={
+                                 pkmSelected.sprites.other['official-artwork']
+                                    .front_default
+                              }
+                           />
+                           <Image
+                              fallbackSrc="/imgPlaceHolder.png"
+                              p={2}
+                              alt={pkmSelected.name}
+                              src={pkmSelected.sprites.front_default}
+                           />
+                           <Heading size="xs" textTransform="uppercase">
+                              ID
+                           </Heading>
+                           <Text pt="2" fontSize="sm">
+                              {pkmSelected.id}
+                           </Text>
+                        </Box>
+                        <Box>
+                           <Heading size="xs" textTransform="uppercase">
+                              Altura
+                           </Heading>
+                           <Text pt="2" fontSize="sm">
+                              {pkmSelected.height}m
+                           </Text>
+                        </Box>
+                        <Box>
+                           <Heading size="xs" textTransform="uppercase">
+                              Peso
+                           </Heading>
+                           <Text pt="2" fontSize="sm">
+                              {pkmSelected.weight}kg
+                           </Text>
+                        </Box>
+                        <Box>
+                           <Heading size="xs" textTransform="uppercase">
+                              Tipagem
+                           </Heading>
+                           <Stack direction={'row'} spacing={1}>
+                              {pkmSelected.types.map((type, index) => {
+                                 return (
+                                    <Text
+                                       key={type.slot}
+                                       textTransform="capitalize"
+                                       fontSize="sm"
+                                       pt="2"
+                                    >
+                                       {index > 0 && '& '}
+                                       {type.type.name}
+                                    </Text>
+                                 )
+                              })}
+                           </Stack>
+                        </Box>
+                     </Stack>
+                  </ModalBody>
+                  <ModalFooter>
+                     <Button colorScheme="blue" mr={3} onClick={onCloseModal}>
+                        Fechar
+                     </Button>
+                  </ModalFooter>
+               </ModalContent>
+            </Modal>
+         )}
 
          <Center>
             <Grid

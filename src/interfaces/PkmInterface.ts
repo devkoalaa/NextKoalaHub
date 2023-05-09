@@ -1,7 +1,7 @@
 export interface PkmInterface {
+   id: number
    name: string
    height: number
-   id: number
    weight: number
    species: Species
    sprites: Sprites
@@ -59,9 +59,9 @@ export interface Type2 {
 }
 
 const jsonResult = {
+   id: 94,
    name: 'gengar',
    height: 15,
-   id: 94,
    weight: 405,
    species: {
       name: 'gengar',

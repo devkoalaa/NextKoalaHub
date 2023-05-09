@@ -9,6 +9,8 @@ export async function PokemonApi(id: string) {
       return {
          ...data,
          name: data.name[0].toUpperCase() + data.name.substring(1),
+         height: data.height / 10,
+         weight: data.weight / 10,
       }
    } catch {
       return {
