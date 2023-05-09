@@ -16,13 +16,22 @@ import {
    FormErrorMessage,
    Grid,
    GridItem,
+   Heading,
    IconButton,
    Image,
    Input,
+   Modal,
+   ModalBody,
+   ModalCloseButton,
+   ModalContent,
+   ModalFooter,
+   ModalHeader,
+   ModalOverlay,
    ScaleFade,
    Skeleton,
-   SkeletonText,
    Stack,
+   StackDivider,
+   Text,
    useDisclosure,
 } from '@chakra-ui/react'
 import Head from 'next/head'
@@ -33,21 +42,27 @@ import s from './styles.module.scss'
 
 export default function Pokemon() {
    const [pkm, setPkm] = useState<PkmInterface>()
+   const [pkmSelected, setPkmSelected] = useState<PkmInterface>()
    const [listPkm, setListPkm] = useState<PkmInterface[]>([])
    const [searchedPkm, setSearchedPkm] = useState('')
    const [isLoaded, setIsLoaded] = useState(false)
-   const [errorMsg, setErrorMsg] = useState('')
    const [isError, setIsError] = useState(false)
+   const [errorMsg, setErrorMsg] = useState('')
    const [focusBorderColor, setFocusBorderColor] = useState('blue.300')
    const [btnAddPkmSubmitting, setBtnAddPkmSubmitting] = useState(false)
    const [btnRdmPkmSubmitting, setBtnRdmPkmSubmitting] = useState(false)
+   const { isOpen: isOpenFade, onOpen: onOpenFade } = useDisclosure()
+   const cancelRef = useRef<any>()
    const {
       isOpen: isOpenDialog,
       onOpen: onOpenDialog,
       onClose: onCloseDialog,
    } = useDisclosure()
-   const { isOpen: isOpenFade, onOpen: onOpenFade } = useDisclosure()
-   const cancelRef = useRef<any>()
+   const {
+      isOpen: isOpenModal,
+      onOpen: onOpenModal,
+      onClose: onCloseModal,
+   } = useDisclosure()
 
    useEffect(() => {
       const storageListPkm = localStorage.getItem('@NKH:listPkm')
@@ -108,6 +123,10 @@ export default function Pokemon() {
       setBtnRdmPkmSubmitting(false)
    }
 
+   const handlePkmDetails = (pkm: PkmInterface) => {
+      console.log('handlePkmDetails:', pkm)
+   }
+
    return (
       <Container paddingBottom={5}>
          <Head>
@@ -154,10 +173,19 @@ export default function Pokemon() {
                      icon={<DeleteIcon />}
                      colorScheme="red"
                      aria-label="Delete All Pkm"
+                     isDisabled={listPkm.length <= 0}
                      onClick={() => {
                         onOpenDialog()
                      }}
                   />
+                  {/* <IconButton
+                     icon={<QuestionIcon />}
+                     colorScheme="green"
+                     aria-label="---"
+                     onClick={() => {
+                        onOpenModal()
+                     }}
+                  /> */}
                </Stack>
                <Container margin={2}>
                   <AlertDialog
@@ -197,6 +225,61 @@ export default function Pokemon() {
             </form>
          </FormControl>
 
+         <Modal
+            isOpen={isOpenModal}
+            onClose={onCloseModal}
+            size={{ base: 'xs', sm: 'sm', md: 'md', lg: 'lg' }}
+         >
+            <ModalOverlay />
+            <ModalContent>
+               <ModalHeader>{pkmSelected?.name}</ModalHeader>
+               <ModalCloseButton />
+               <ModalBody>
+                  <Stack divider={<StackDivider />} spacing="4">
+                     <Box>
+                        <Image
+                           fallbackSrc="/imgPlaceHolder.png"
+                           p={2}
+                           alt="nomepkm"
+                           src={
+                              pkmSelected?.sprites.other['official-artwork']
+                                 .front_default
+                           }
+                        />
+                        <Heading size="xs" textTransform="uppercase">
+                           Número na Dex
+                        </Heading>
+                        <Text pt="2" fontSize="sm">
+                           {pkmSelected?.id}
+                        </Text>
+                     </Box>
+                     <Box>
+                        <Heading size="xs" textTransform="uppercase">
+                           Altura
+                        </Heading>
+                        <Text pt="2" fontSize="sm">
+                           {pkmSelected?.height} m
+                        </Text>
+                     </Box>
+                     <Box>
+                        <Heading size="xs" textTransform="uppercase">
+                           Peso
+                        </Heading>
+                        <Text pt="2" fontSize="sm">
+                           {pkmSelected?.weight} lb
+                        </Text>
+                     </Box>
+                  </Stack>
+               </ModalBody>
+
+               <ModalFooter>
+                  <Button colorScheme="blue" mr={3} onClick={onCloseModal}>
+                     Fechar
+                  </Button>
+               </ModalFooter>
+            </ModalContent>
+         </Modal>
+
          <Center>
             <Grid
                templateColumns={{
@@ -218,7 +301,14 @@ export default function Pokemon() {
                               fadeDuration={1}
                               borderRadius="lg"
                            >
-                              <GridItem className={s.container}>
+                              <GridItem
+                                 className={s.container}
+                                 onClick={() => {
+                                    handlePkmDetails(pkm),
+                                       onOpenModal(),
+                                       setPkmSelected(pkm)
+                                 }}
+                              >
                                  <Box
                                     className={s.front}
                                     borderWidth="1px"
