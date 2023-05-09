@@ -123,10 +123,6 @@ export default function Pokemon() {
       setBtnRdmPkmSubmitting(false)
    }
 
-   const handlePkmDetails = (pkm: PkmInterface) => {
-      console.log('handlePkmDetails:', pkm)
-   }
-
    return (
       <Container paddingBottom={5}>
          <Head>
@@ -190,10 +186,10 @@ export default function Pokemon() {
                <Container margin={2}>
                   <AlertDialog
                      size={{ base: 'xs', md: 'lg' }}
-                     motionPreset="slideInBottom"
                      leastDestructiveRef={cancelRef}
                      onClose={onCloseDialog}
                      isOpen={isOpenDialog}
+                     motionPreset="slideInBottom"
                      isCentered
                   >
                      <AlertDialogOverlay />
@@ -228,7 +224,9 @@ export default function Pokemon() {
          <Modal
             isOpen={isOpenModal}
             onClose={onCloseModal}
-            size={{ base: 'xs', sm: 'sm', md: 'md', lg: 'lg' }}
+            size={{ base: 'xs', md: 'lg' }}
+            motionPreset="slideInRight"
+            isCentered
          >
             <ModalOverlay />
             <ModalContent>
@@ -240,7 +238,7 @@ export default function Pokemon() {
                         <Image
                            fallbackSrc="/imgPlaceHolder.png"
                            p={2}
-                           alt="nomepkm"
+                           alt={pkmSelected?.name}
                            src={
                               pkmSelected?.sprites.other['official-artwork']
                                  .front_default
@@ -304,9 +302,7 @@ export default function Pokemon() {
                               <GridItem
                                  className={s.container}
                                  onClick={() => {
-                                    handlePkmDetails(pkm),
-                                       onOpenModal(),
-                                       setPkmSelected(pkm)
+                                    onOpenModal(), setPkmSelected(pkm)
                                  }}
                               >
                                  <Box
