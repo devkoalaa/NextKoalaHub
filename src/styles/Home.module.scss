@@ -90,10 +90,6 @@
 }
 
 @media (prefers-reduced-motion) {
-   .thirteen::before {
-      animation: none;
-   }
-
    .card:hover span {
       transform: none;
    }
@@ -107,7 +103,6 @@
 
    .grid {
       grid-template-columns: 1fr;
-      margin-bottom: 120px;
       max-width: 320px;
       text-align: center;
    }

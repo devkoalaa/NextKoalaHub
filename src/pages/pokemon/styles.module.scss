@@ -21,14 +21,16 @@
    transform: rotateY(180deg);
 }
 
-.container:hover .front {
-   transform: rotateY(-180deg);
-}
-
-.container:hover .back {
-   transform: rotateY(0deg);
-}
-
 .type {
    max-width: 10px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+   .container:hover .front {
+      transform: rotateY(-180deg);
+   }
+
+   .container:hover .back {
+      transform: rotateY(0deg);
+   }
 }

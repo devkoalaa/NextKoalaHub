@@ -8,13 +8,10 @@ import {
    Stack,
    useColorMode,
    useColorModeValue,
-   useDisclosure,
 } from '@chakra-ui/react'
-import { ReactNode } from 'react'
 
 export default function Nav() {
    const { colorMode, toggleColorMode } = useColorMode()
-   const { isOpen, onOpen, onClose } = useDisclosure()
    return (
       <>
          <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
