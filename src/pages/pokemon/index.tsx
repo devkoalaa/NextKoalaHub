@@ -347,7 +347,9 @@ export default function Pokemon() {
                               <GridItem
                                  className={s.container}
                                  onClick={() => {
-                                    onOpenModal(), setPkmSelected(pkm)
+                                    onOpenModal(),
+                                       setPkmSelected(pkm),
+                                       setShowSprite(true)
                                  }}
                               >
                                  <Box
