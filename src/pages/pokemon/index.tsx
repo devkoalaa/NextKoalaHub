@@ -1,7 +1,7 @@
 import {
-   SearchIcon,
    DeleteIcon,
    QuestionIcon,
+   SearchIcon,
    StarIcon,
 } from '@chakra-ui/icons'
 import {
@@ -29,7 +29,6 @@ import {
    ModalBody,
    ModalCloseButton,
    ModalContent,
-   ModalFooter,
    ModalHeader,
    ModalOverlay,
    ScaleFade,
@@ -81,7 +80,7 @@ export default function Pokemon() {
    }, [])
 
    useEffect(() => {
-      pkm && setListPkm((e) => [pkm, ...e])
+      pkm && setListPkm((e) => [...e, pkm])
    }, [pkm])
 
    useEffect(() => {
@@ -235,6 +234,7 @@ export default function Pokemon() {
                isOpen={isOpenModal}
                onClose={onCloseModal}
                motionPreset="slideInRight"
+               allowPinchZoom
                size={{
                   base: 'xs',
                   sm: 'sm',
@@ -338,7 +338,7 @@ export default function Pokemon() {
                {listPkm &&
                   listPkm.map((pkm, index) => {
                      return (
-                        <ScaleFade key={index} initialScale={1} in={isOpenFade}>
+                        <ScaleFade key={index} initialScale={5} in={isOpenFade}>
                            <Skeleton
                               isLoaded={isLoaded}
                               fadeDuration={1}
