@@ -1,9 +1,5 @@
-import {
-   DeleteIcon,
-   QuestionIcon,
-   SearchIcon,
-   StarIcon,
-} from '@chakra-ui/icons'
+import ModalPkm from '@/components/ModalPkm/ModalPkm'
+import { DeleteIcon, QuestionIcon, SearchIcon } from '@chakra-ui/icons'
 import {
    AlertDialog,
    AlertDialogBody,
@@ -21,21 +17,14 @@ import {
    FormErrorMessage,
    Grid,
    GridItem,
-   Heading,
    IconButton,
    Image,
    Input,
    Modal,
-   ModalBody,
-   ModalCloseButton,
-   ModalContent,
-   ModalHeader,
    ModalOverlay,
    ScaleFade,
    Skeleton,
    Stack,
-   StackDivider,
-   Text,
    useDisclosure,
 } from '@chakra-ui/react'
 import Head from 'next/head'
@@ -241,85 +230,7 @@ export default function Pokemon() {
                   md: 'md',
                }}
             >
-               <ModalOverlay backdropFilter="blur(10px)" />
-               <ModalContent paddingBottom={2}>
-                  <ModalHeader>{pkmSelected.name}</ModalHeader>
-                  <ModalCloseButton />
-                  <ModalBody>
-                     {showSprite && (
-                        <Image
-                           alt={pkmSelected.name}
-                           src={
-                              pkmSelected.sprites.other['official-artwork']
-                                 .front_default
-                           }
-                        />
-                     )}
-                     {!showSprite && (
-                        <Image
-                           alt={pkmSelected.name}
-                           src={
-                              pkmSelected.sprites.other['official-artwork']
-                                 .front_shiny
-                           }
-                        />
-                     )}
-                     <Stack direction={'row'} justifyContent={'end'}>
-                        <IconButton
-                           icon={<StarIcon />}
-                           colorScheme="yellow"
-                           aria-label="Shiny Pkm"
-                           onClick={() => setShowSprite(!showSprite)}
-                        />
-                     </Stack>
-                     <Stack divider={<StackDivider />} spacing="2">
-                        <Box>
-                           <Heading size="xs" textTransform="uppercase">
-                              ID
-                           </Heading>
-                           <Text pt="2" fontSize="sm">
-                              {pkmSelected.id}
-                           </Text>
-                        </Box>
-                        <Box>
-                           <Heading size="xs" textTransform="uppercase">
-                              Altura
-                           </Heading>
-                           <Text pt="2" fontSize="sm">
-                              {pkmSelected.height}m
-                           </Text>
-                        </Box>
-                        <Box>
-                           <Heading size="xs" textTransform="uppercase">
-                              Peso
-                           </Heading>
-                           <Text pt="2" fontSize="sm">
-                              {pkmSelected.weight}kg
-                           </Text>
-                        </Box>
-                        <Box>
-                           <Heading size="xs" textTransform="uppercase">
-                              Tipagem
-                           </Heading>
-                           <Stack direction={'row'} spacing={1}>
-                              {pkmSelected.types.map((type, index) => {
-                                 return (
-                                    <Text
-                                       key={type.slot}
-                                       textTransform="capitalize"
-                                       fontSize="sm"
-                                       pt="2"
-                                    >
-                                       {index > 0 && '& '}
-                                       {type.type.name}
-                                    </Text>
-                                 )
-                              })}
-                           </Stack>
-                        </Box>
-                     </Stack>
-                  </ModalBody>
-               </ModalContent>
+               <ModalPkm pkmSelected={pkmSelected} />
             </Modal>
          )}
 
