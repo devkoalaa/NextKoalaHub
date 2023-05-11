@@ -1,4 +1,4 @@
-import styles from '@/styles/Home.module.scss'
+import s from './styles.module.scss'
 import { Inter } from 'next/font/google'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -17,15 +17,15 @@ export default function Home() {
             />
             <link rel="icon" href="/favicon.ico" />
          </Head>
-         <main className={styles.main}>
-            <div className={styles.description}></div>
+         <main className={s.main}>
+            <div className={s.description}></div>
 
-            <div className={styles.center}>
-               <h1 className={styles['fortnite-font']}>Koala Hub</h1>
+            <div className={s.center}>
+               <h1 className={s['fortnite-font']}>Koala Hub</h1>
             </div>
 
-            <div className={styles.grid}>
-               <Link href="" className={styles.card} rel="noopener noreferrer">
+            <div className={s.grid}>
+               <Link href="" className={s.card} rel="noopener noreferrer">
                   <h2 className={inter.className}>
                      Console! <span>-&gt;</span>
                   </h2>
@@ -33,7 +33,7 @@ export default function Home() {
 
                <Link
                   href="/pokemon"
-                  className={styles.card}
+                  className={s.card}
                   rel="noopener noreferrer"
                >
                   <h2 className={inter.className}>
@@ -41,13 +41,13 @@ export default function Home() {
                   </h2>
                </Link>
 
-               <Link href="" className={styles.card} rel="noopener noreferrer">
+               <Link href="" className={s.card} rel="noopener noreferrer">
                   <h2 className={inter.className}>
                      Fortnite (Em breve)<span>-&gt;</span>
                   </h2>
                </Link>
 
-               <Link href="" className={styles.card}>
+               <Link href="" className={s.card}>
                   <h2 className={inter.className}>
                      Onde estacionei meu Uno? (Em breve)<span>-&gt;</span>
                   </h2>

@@ -1,4 +1,4 @@
-import ModalPkm from '@/components/ModalPkm/ModalPkm'
+import ModalPkm from '@/components/ModalPkm/index'
 import { DeleteIcon, QuestionIcon, SearchIcon } from '@chakra-ui/icons'
 import {
    AlertDialog,
@@ -21,7 +21,6 @@ import {
    Image,
    Input,
    Modal,
-   ModalOverlay,
    ScaleFade,
    Skeleton,
    Stack,
@@ -44,7 +43,6 @@ export default function Pokemon() {
    const [focusBorderColor, setFocusBorderColor] = useState('blue.300')
    const [btnAddPkmSubmitting, setBtnAddPkmSubmitting] = useState(false)
    const [btnRdmPkmSubmitting, setBtnRdmPkmSubmitting] = useState(false)
-   const [showSprite, setShowSprite] = useState(true)
    const { isOpen: isOpenFade, onOpen: onOpenFade } = useDisclosure()
    const cancelRef = useRef<any>()
    const {
@@ -100,7 +98,7 @@ export default function Pokemon() {
             setErrorMsg(result.errorMsg)
          }
 
-         if (result.hasOwnProperty('abilities')) {
+         if (result.hasOwnProperty('id')) {
             setPkm(result)
             setSearchedPkm('')
          }
@@ -223,7 +221,7 @@ export default function Pokemon() {
                isOpen={isOpenModal}
                onClose={onCloseModal}
                motionPreset="slideInRight"
-               allowPinchZoom
+               blockScrollOnMount={false}
                size={{
                   base: 'xs',
                   sm: 'sm',
@@ -258,9 +256,7 @@ export default function Pokemon() {
                               <GridItem
                                  className={s.container}
                                  onClick={() => {
-                                    onOpenModal(),
-                                       setPkmSelected(pkm),
-                                       setShowSprite(true)
+                                    onOpenModal(), setPkmSelected(pkm)
                                  }}
                               >
                                  <Box

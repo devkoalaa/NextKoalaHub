@@ -30,24 +30,16 @@ export default function ModalPkm({
             <ModalHeader>{pkmSelected.name}</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-               {showSprite && (
-                  <Image
-                     alt={pkmSelected.name}
-                     src={
-                        pkmSelected.sprites.other['official-artwork']
-                           .front_default
-                     }
-                  />
-               )}
-               {!showSprite && (
-                  <Image
-                     alt={pkmSelected.name}
-                     src={
-                        pkmSelected.sprites.other['official-artwork']
-                           .front_shiny
-                     }
-                  />
-               )}
+               <Image
+                  alt={pkmSelected.name}
+                  src={
+                     showSprite
+                        ? pkmSelected.sprites.other['official-artwork']
+                             .front_default
+                        : pkmSelected.sprites.other['official-artwork']
+                             .front_shiny
+                  }
+               />
                <Stack direction={'row'} justifyContent={'end'}>
                   <IconButton
                      icon={<StarIcon />}
