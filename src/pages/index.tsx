@@ -41,9 +41,13 @@ export default function Home() {
                   </h2>
                </Link>
 
-               <Link href="" className={s.card} rel="noopener noreferrer">
+               <Link
+                  href="/fortnite"
+                  className={s.card}
+                  rel="noopener noreferrer"
+               >
                   <h2 className={inter.className}>
-                     Fortnite (Em breve)<span>-&gt;</span>
+                     Fortnite (Em construção)<span>-&gt;</span>
                   </h2>
                </Link>
 

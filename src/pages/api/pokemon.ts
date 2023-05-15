@@ -1,8 +1,8 @@
-import { PkmInterface } from '@/interfaces/PkmInterface'
+import PkmInterface from '@/interfaces/PkmInterface'
 
 const URL_API = 'https://pokeapi.co/api/v2/pokemon/'
 
-export async function PokemonApi(id: string) {
+export default async function PokemonApi(id: string) {
    try {
       const data: PkmInterface = await fetch(URL_API + id).then(
          async (response) => {
