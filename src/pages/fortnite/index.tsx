@@ -78,7 +78,7 @@ export default function Fortnite() {
          </form>
 
          {playerSeason && playerAll && (
-            <Container paddingTop={2}>
+            <>
                <Text className={styles['fortnite-font']} p={2}>
                   {playerSeason.data.account.name}
                </Text>
@@ -172,7 +172,7 @@ export default function Fortnite() {
                      </TabPanel>
                   </TabPanels>
                </Tabs>
-            </Container>
+            </>
          )}
       </Container>
    )
