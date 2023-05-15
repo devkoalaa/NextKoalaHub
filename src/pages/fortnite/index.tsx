@@ -5,8 +5,8 @@ import {
    IconButton,
    Input,
    Stack,
-   StackDivider,
    Stat,
+   StatGroup,
    StatLabel,
    StatNumber,
    Tab,
@@ -44,7 +44,16 @@ export default function Fortnite() {
             setPlayerSeason(resultSeason)
          }
 
+         if (resultAll.hasOwnProperty('data')) {
+            console.log(resultAll)
+            setPlayerAll(resultAll)
+         }
+
          if (resultSeason.hasOwnProperty('error')) {
+            console.log(resultSeason)
+         }
+
+         if (resultAll.hasOwnProperty('error')) {
             console.log(resultSeason)
          }
       }
@@ -68,112 +77,103 @@ export default function Fortnite() {
             </Stack>
          </form>
 
-         {/* {playerSeason && ( */}
-         <Container paddingTop={2}>
-            <Text className={styles['fortnite-font']} p={2}>
-               brkoala
-               {/* {playerSeason.data.account.name} */}
-            </Text>
+         {playerSeason && playerAll && (
+            <Container paddingTop={2}>
+               <Text className={styles['fortnite-font']} p={2}>
+                  {playerSeason.data.account.name}
+               </Text>
 
-            <Tabs
-               borderWidth={'1px'}
-               borderRadius={'lg'}
-               isFitted
-               variant="enclosed"
-            >
-               <TabList mb="1em">
-                  <Tab>Season</Tab>
-                  <Tab>All</Tab>
-               </TabList>
-               <TabPanels>
-                  <TabPanel>
-                     <Stat p={2}>
-                        <Stack divider={<StackDivider />}>
-                           <Stack
-                              direction="row"
-                              justifyContent="space-between"
-                           >
-                              <StatLabel>Nível</StatLabel>
-                              <StatNumber>
-                                 118
-                                 {/* £0.00{playerSeason.data.battlePass.level} */}
-                              </StatNumber>
-                           </Stack>
-                           <Stack
-                              direction="row"
-                              justifyContent="space-between"
-                           >
+               <Tabs
+                  isFitted
+                  variant="enclosed"
+                  borderRadius={'lg'}
+                  borderWidth={'1px'}
+               >
+                  <TabList mb="1em">
+                     <Tab>Season</Tab>
+                     <Tab>All</Tab>
+                  </TabList>
+                  <TabPanels>
+                     <TabPanel>
+                        <Stat>
+                           <StatGroup>
+                              <Stat>
+                                 <StatLabel>Nível</StatLabel>
+                                 <StatNumber>
+                                    {playerSeason.data.battlePass.level}
+                                 </StatNumber>
+                              </Stat>
+                           </StatGroup>
+                           <StatGroup>
+                              <Stat>
+                                 <StatLabel>Vitórias</StatLabel>
+                                 <StatNumber>
+                                    {playerSeason.data.stats.all.overall.wins}
+                                 </StatNumber>
+                              </Stat>
+                              <Stat>
+                                 <StatLabel>Partidas</StatLabel>
+                                 <StatNumber>
+                                    {
+                                       playerSeason.data.stats.all.overall
+                                          .matches
+                                    }
+                                 </StatNumber>
+                              </Stat>
+                           </StatGroup>
+                           <StatGroup>
+                              <Stat>
+                                 <StatLabel>Eliminações</StatLabel>
+                                 <StatNumber>
+                                    {playerSeason.data.stats.all.overall.kills}
+                                 </StatNumber>
+                              </Stat>
+                              <Stat>
+                                 <StatLabel>Win Rate</StatLabel>
+                                 <StatNumber>
+                                    {
+                                       playerSeason.data.stats.all.overall
+                                          .winRate
+                                    }
+                                 </StatNumber>
+                              </Stat>
+                           </StatGroup>
+                        </Stat>
+                     </TabPanel>
+                     <TabPanel>
+                        <StatGroup>
+                           <Stat>
                               <StatLabel>Vitórias</StatLabel>
                               <StatNumber>
-                                 19
-                                 {/* £0.00{playerSeason.data.battlePass.level} */}
+                                 {playerAll.data.stats.all.overall.wins}
                               </StatNumber>
+                           </Stat>
+                           <Stat>
                               <StatLabel>Partidas</StatLabel>
                               <StatNumber>
-                                 211
-                                 {/* £0.00{playerSeason.data.battlePass.level} */}
+                                 {playerAll.data.stats.all.overall.matches}
                               </StatNumber>
-                           </Stack>
-                           <Stack
-                              direction="row"
-                              justifyContent="space-between"
-                           >
+                           </Stat>
+                        </StatGroup>
+                        <StatGroup>
+                           <Stat>
                               <StatLabel>Eliminações</StatLabel>
                               <StatNumber>
-                                 588
-                                 {/* £0.00{playerSeason.data.battlePass.level} */}
+                                 {playerAll.data.stats.all.overall.kills}
                               </StatNumber>
+                           </Stat>
+                           <Stat>
                               <StatLabel>Win Rate</StatLabel>
                               <StatNumber>
-                                 9,01%
-                                 {/* £0.00{playerSeason.data.battlePass.level} */}
+                                 {playerAll.data.stats.all.overall.winRate}
                               </StatNumber>
-                           </Stack>
-                        </Stack>
-                     </Stat>
-                  </TabPanel>
-                  <TabPanel>
-                     <Stat p={2}>
-                        <Stack
-                           divider={<StackDivider borderColor="gray.200" />}
-                        >
-                           <Stack
-                              direction="row"
-                              justifyContent="space-between"
-                           >
-                              <StatLabel>Vitórias</StatLabel>
-                              <StatNumber>
-                                 170
-                                 {/* £0.00{playerSeason.data.battlePass.level} */}
-                              </StatNumber>
-                              <StatLabel>Partidas</StatLabel>
-                              <StatNumber>
-                                 3996
-                                 {/* £0.00{playerSeason.data.battlePass.level} */}
-                              </StatNumber>
-                           </Stack>
-                           <Stack
-                              direction="row"
-                              justifyContent="space-between"
-                           >
-                              <StatLabel>Eliminações</StatLabel>
-                              <StatNumber>
-                                 6427
-                                 {/* £0.00{playerSeason.data.battlePass.level} */}
-                              </StatNumber>
-                              <StatLabel>Win Rate</StatLabel>
-                              <StatNumber>
-                                 4,25%
-                                 {/* £0.00{playerSeason.data.battlePass.level} */}
-                              </StatNumber>
-                           </Stack>
-                        </Stack>
-                     </Stat>
-                  </TabPanel>
-               </TabPanels>
-            </Tabs>
-         </Container>
-         {/* )} */}
+                           </Stat>
+                        </StatGroup>
+                     </TabPanel>
+                  </TabPanels>
+               </Tabs>
+            </Container>
+         )}
       </Container>
    )
 }
