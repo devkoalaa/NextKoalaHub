@@ -97,7 +97,7 @@ export default function Fortnite() {
                      <TabPanel>
                         <Stat>
                            <StatGroup>
-                              <Stat>
+                              <Stat p={2}>
                                  <StatLabel>Nível</StatLabel>
                                  <StatNumber>
                                     {playerSeason.data.battlePass.level}
@@ -105,13 +105,13 @@ export default function Fortnite() {
                               </Stat>
                            </StatGroup>
                            <StatGroup>
-                              <Stat>
+                              <Stat p={2}>
                                  <StatLabel>Vitórias</StatLabel>
                                  <StatNumber>
                                     {playerSeason.data.stats.all.overall.wins}
                                  </StatNumber>
                               </Stat>
-                              <Stat>
+                              <Stat p={2}>
                                  <StatLabel>Partidas</StatLabel>
                                  <StatNumber>
                                     {
@@ -122,19 +122,20 @@ export default function Fortnite() {
                               </Stat>
                            </StatGroup>
                            <StatGroup>
-                              <Stat>
+                              <Stat p={2}>
                                  <StatLabel>Eliminações</StatLabel>
                                  <StatNumber>
                                     {playerSeason.data.stats.all.overall.kills}
                                  </StatNumber>
                               </Stat>
-                              <Stat>
+                              <Stat p={2}>
                                  <StatLabel>Win Rate</StatLabel>
                                  <StatNumber>
                                     {
                                        playerSeason.data.stats.all.overall
                                           .winRate
                                     }
+                                    %
                                  </StatNumber>
                               </Stat>
                            </StatGroup>
@@ -142,13 +143,13 @@ export default function Fortnite() {
                      </TabPanel>
                      <TabPanel>
                         <StatGroup>
-                           <Stat>
+                           <Stat p={2}>
                               <StatLabel>Vitórias</StatLabel>
                               <StatNumber>
                                  {playerAll.data.stats.all.overall.wins}
                               </StatNumber>
                            </Stat>
-                           <Stat>
+                           <Stat p={2}>
                               <StatLabel>Partidas</StatLabel>
                               <StatNumber>
                                  {playerAll.data.stats.all.overall.matches}
@@ -156,16 +157,16 @@ export default function Fortnite() {
                            </Stat>
                         </StatGroup>
                         <StatGroup>
-                           <Stat>
+                           <Stat p={2}>
                               <StatLabel>Eliminações</StatLabel>
                               <StatNumber>
                                  {playerAll.data.stats.all.overall.kills}
                               </StatNumber>
                            </Stat>
-                           <Stat>
+                           <Stat p={2}>
                               <StatLabel>Win Rate</StatLabel>
                               <StatNumber>
-                                 {playerAll.data.stats.all.overall.winRate}
+                                 {playerAll.data.stats.all.overall.winRate}%
                               </StatNumber>
                            </Stat>
                         </StatGroup>
