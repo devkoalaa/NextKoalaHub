@@ -1,4 +1,4 @@
-import { PkmInterface } from '@/interfaces/PkmInterface'
+import PkmInterface from '@/interfaces/PkmInterface'
 import { StarIcon } from '@chakra-ui/icons'
 import {
    Box,

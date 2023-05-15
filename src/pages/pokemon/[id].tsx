@@ -1,8 +1,8 @@
-import { PkmInterface } from '@/interfaces/PkmInterface'
+import PkmInterface from '@/interfaces/PkmInterface'
 import { Center, Container, Image, Select } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { PokemonApi } from '../api/pokemon'
+import PokemonApi from '../api/pokemon'
 
 export default function PokemonDetail() {
    const router = useRouter()

@@ -28,7 +28,7 @@ import {
 } from '@chakra-ui/react'
 import Head from 'next/head'
 import { useEffect, useRef, useState } from 'react'
-import PkmInterface from '../../interfaces/PkmInterface'
+import PkmInterface from '@/interfaces/PkmInterface'
 import PokemonApi from '../api/pokemon'
 import s from './styles.module.scss'
 
