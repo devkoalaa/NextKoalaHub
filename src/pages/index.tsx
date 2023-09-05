@@ -25,9 +25,13 @@ export default function Home() {
             </div>
 
             <div className={s.grid}>
-               <Link href="" className={s.card} rel="noopener noreferrer">
+               <Link
+                  href="/baco"
+                  className={s.card}
+                  rel="noopener noreferrer"
+               >
                   <h2 className={inter.className}>
-                     Console! <span>-&gt;</span>
+                     baco-api! <span>-&gt;</span>
                   </h2>
                </Link>
 
